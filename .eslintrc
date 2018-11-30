@@ -68,6 +68,7 @@
   "globals": {
     "require": 1,
     "process": 1,
-    "console": 1
+    "console": 1,
+    "module": 1
   }
 }

@@ -1,10 +1,6 @@
 const gulp = require('gulp');
-const pkg = require.main.require(`${process.cwd()}/package.json`);
 
+require('require-dir')('./gulp-tasks');
 
-gulp.task('testing', () => {
-    console.log(`testing....${pkg.name}`);
-});
-
-
-gulp.task('default', ['testing'], () => {});
+gulp.task('default', ["clean-dist"], () => {});
+gulp.task('build', ["clean-dist"], () => {});
