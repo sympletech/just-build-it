@@ -27,8 +27,7 @@
     "url": "https://github.com/dlewis-esri/just-build-it/issues"
   },
   "homepage": "https://github.com/dlewis-esri/just-build-it#readme",
-  "dependencies": {},
-  "devDependencies": {
+  "dependencies": {
     "@babel/core": "^7.1.6",
     "@babel/preset-env": "^7.1.6",
     "browser-sync": "^2.26.3",
