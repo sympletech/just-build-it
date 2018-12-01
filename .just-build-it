@@ -1,0 +1,6 @@
+{
+    "src_path": "./src",
+    "js_glob": "**/*.js",
+    "scss_glob": "**/*.scss",
+    "build_path": "./dist"
+  }
