@@ -1,6 +1,6 @@
 {
   "name": "just-build-it",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "A reusable builder to compile es6 and scss from a source directory into a destination directory",
   "bin": {
     "just-build-it": "bin/just-build-it.js"
@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dlewis-esri/just-build-it.git"
+    "url": "git+https://github.com/sympletech/just-build-it.git"
   },
   "keywords": [
     "es6",
@@ -24,9 +24,9 @@
   "author": "Daniel A. Lewis",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/dlewis-esri/just-build-it/issues"
+    "url": "https://github.com/sympletech/just-build-it/issues"
   },
-  "homepage": "https://github.com/dlewis-esri/just-build-it#readme",
+  "homepage": "https://github.com/sympletech/just-build-it#readme",
   "dependencies": {
     "@babel/core": "^7.1.6",
     "@babel/preset-env": "^7.1.6",
