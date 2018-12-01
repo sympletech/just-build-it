@@ -7,6 +7,14 @@ const config = Object.assign({}, {
     "src_path": "./src",
     "js_glob": "**/*.js",
     "scss_glob": "**/*.scss",
+    "static_files_glob": [
+        '/**/*.html',
+        '/**/*.css',
+        '/**/*.jpg',
+        '/**/*.gif',
+        '/**/*.png',
+        '/**/*.svg'
+    ],
     "build_path": "./dist",
     "run_server": true,
     "server_port": 3000
