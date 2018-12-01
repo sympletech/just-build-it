@@ -2,5 +2,7 @@
     "src_path": "./src",
     "js_glob": "**/*.js",
     "scss_glob": "**/*.scss",
-    "build_path": "./dist"
+    "build_path": "./dist",
+    "run_server": true,
+    "server_port": 3000    
   }
