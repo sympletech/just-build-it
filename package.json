@@ -5,7 +5,7 @@
   "bin": {
     "just-build-it": "bin/just-build-it.js"
   },
-  "main": "gulpfile.js",
+  "main": "bin/just-build-it.js",
   "scripts": {
     "start": "just-build-it",
     "build": "just-build-it build",
@@ -33,13 +33,19 @@
     "scss_glob": "**/*.scss",
     "build_path": "./dist"
   },
-  "dependencies": {
+  "dependencies": {},
+  "devDependencies": {
     "@babel/core": "^7.1.6",
+    "@babel/preset-env": "^7.1.6",
     "fs-extra": "^7.0.1",
     "glob": "^7.1.3",
     "gulp": "^3.9.1",
     "gulp-rename": "^1.4.0",
+    "gulp-sass": "^4.0.2",
+    "gulp-sass-glob": "^1.0.9",
     "gulp-sourcemaps": "^2.6.4",
+    "install": "^0.12.2",
+    "npm": "^6.4.1",
     "require-dir": "^1.2.0",
     "rollup": "^0.67.3",
     "rollup-plugin-babel": "^4.0.3",
@@ -48,9 +54,6 @@
     "rollup-plugin-node-resolve": "^3.4.0",
     "rollup-stream": "^1.24.1",
     "vinyl-buffer": "^1.0.1",
-    "vinyl-source-stream": "^2.0.0",
-    "@babel/preset-env": "^7.1.6",
-    "install": "^0.12.2",
-    "npm": "^6.4.1"    
+    "vinyl-source-stream": "^2.0.0"
   }
 }

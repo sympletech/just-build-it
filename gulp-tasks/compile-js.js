@@ -12,7 +12,7 @@ gulp.task('compile-js', () => {
 
 gulp.task('watch-js', () => {
     console.log('Watching Javascript Files');
-    gulp.watch(jsGlob, () => {
+    gulp.watch(`${config.src_path}/**/*.js`, () => {
         buildJsFiles();
     });
 });
