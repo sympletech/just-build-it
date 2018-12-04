@@ -1,8 +1,7 @@
 const fs = require('fs-extra');
 
-// const configPath = `${process.cwd()}/.just-build-it`;
-// const configFile = fs.readFileSync(configPath, 'utf-8');
-const configFile = "{}";
+const configPath = `${process.cwd()}/.just-build-it`;
+const configFile = fs.readFileSync(configPath, 'utf-8');
 
 const config = Object.assign({}, {
     "src_path": "./src",
