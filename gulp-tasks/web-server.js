@@ -10,7 +10,7 @@ gulp.task('web-server', () => {
             open: false,
             port: config.server_port,
             server: {
-                baseDir: config.build_path,
+                baseDir: config.server_root,
                 directory: true
             },
             watchOptions: {
