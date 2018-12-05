@@ -1,16 +1,21 @@
 {
-    "src_path": "./src",
-    "js_glob": "**/*.js",
-    "scss_glob": "**/*.scss",
-    "static_files_glob": [
-        '/**/*.html',
-        '/**/*.css',
-        '/**/*.jpg',
-        '/**/*.gif',
-        '/**/*.png',
-        '/**/*.svg'
-    ],    
-    "build_path": "./dist",
     "run_server": true,
-    "server_port": 3000    
+    "server_port": 3000,
+    "server_root": "./dist",
+    "builds": [
+        {
+            "src_path": "./src",
+            "build_path": "./dist",
+            "js_glob": "**/*.js",
+            "scss_glob": "**/*.scss",
+            "static_files_glob": [
+                "/**/*.html",
+                "/**/*.css",
+                "/**/*.jpg",
+                "/**/*.gif",
+                "/**/*.png",
+                "/**/*.svg"
+            ]   
+        }
+    ]
   }
