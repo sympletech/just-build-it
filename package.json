@@ -1,6 +1,6 @@
 {
   "name": "just-build-it",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "A reusable builder to compile es6 and scss from a source directory into a destination directory",
   "bin": {
     "just-build-it": "bin/just-build-it.js"
@@ -9,6 +9,7 @@
   "scripts": {
     "start": "just-build-it",
     "build": "just-build-it build",
+    "watch": "just-build-it watch",
     "build-js": "just-build-it build-js",
     "build-scss": "just-build-it build-scss"
   },
