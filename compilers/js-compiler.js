@@ -9,9 +9,8 @@ const source = require('vinyl-source-stream');
 const buffer = require('vinyl-buffer');
 const sourcemaps = require('gulp-sourcemaps');
 const rename = require('gulp-rename');
-const gulpUglify = require('gulp-uglify');
 
-function jsCompiler({sourceJs, outputDirName, outputName}) {
+function jsCompiler({sourceJs, outputDirName, outputName, minify}) {
     rollup_stream({
         input: sourceJs,
         format: 'umd',
@@ -48,10 +47,6 @@ function jsCompiler({sourceJs, outputDirName, outputName}) {
                 loadMaps: true
             })
         )
-        .pipe(gulpUglify({
-            mangle:false,
-            compress: false
-        }))
         .pipe(
             rename(outputName)
         )
