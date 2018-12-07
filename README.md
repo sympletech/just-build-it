@@ -92,9 +92,7 @@ rollup-plugin-babel
 
 @babel/preset-env
 
-Javascript is minified using gulp-uglify
-
-And SourceMaps are built using gulp-sourcemaps
+SourceMaps are built using gulp-sourcemaps
 
 SCSS is compiled using gulp-sass
 
