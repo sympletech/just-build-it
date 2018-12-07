@@ -1,7 +1,7 @@
 const fs = require('fs-extra');
 
 const configPath = `${process.cwd()}/.just-build-it`;
-const configFile = fs.existsSync(configPath) ? fs.readFileSync(configPath, 'utf-8') : '{}';
+const configFile = fs.existsSync(configPath) ? fs.readFileSync(configPath, 'utf-8') : '{"builds":[{}]}';
 const configParsed = JSON.parse(configFile);
 
 const builds = configParsed.builds.map((buildConfig) => (Object.assign({}, {
@@ -28,6 +28,6 @@ const config = Object.assign({}, {
 }, configParsed, {builds});
 
 console.log('Initializing Just-Build-It with the following config:');
-console.log(config);
+console.log(JSON.stringify(config, null, 2));
 
 module.exports = config;
