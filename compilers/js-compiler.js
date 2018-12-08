@@ -16,6 +16,7 @@ function jsCompiler({sourceJs, outputDirName, outputName, minify}) {
         format: 'umd',
         name: 'myApp',
         sourcemap: true,
+        treeshake: false,
         plugins: [
             rollup_plugin_json(),
             rollup_plugin_node_resolve(),

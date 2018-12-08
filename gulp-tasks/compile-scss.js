@@ -24,15 +24,13 @@ gulp.task('watch-scss', () => {
 });
 
 function buildScssFiles({scssGlob, src_path, build_path}) {
-	console.log('Beginning Scss Compile');
+	console.log(`Building SCSS ${(new Date()).toTimeString()}`);
 	glob(scssGlob, (err, scssFiles) => {
 		if (!err) {
 			scssFiles.forEach((sourceScss) => {
 				const sourceFile = path.basename(sourceScss);
 				const sourceFolder = path.dirname(sourceScss);
 				const destFolder = sourceFolder.replace(src_path, build_path);
-
-				console.log(`compiling ${sourceScss} to ${destFolder}/${sourceFile.replace('scss', 'css')}`);
 				scssCompiler({sourceFolder, sourceFile, destFolder});
 			});
 		}

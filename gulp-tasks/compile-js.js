@@ -23,14 +23,12 @@ gulp.task('watch-js', () => {
 });
 
 function buildJsFiles({jsGlob, src_path, build_path}) {
-    console.log('Beginning Javascript Compile');
+    console.log(`Building Javascript ${(new Date()).toTimeString()}`);
     glob(jsGlob, (err, jsFiles) => {
         if (!err) {
             jsFiles.forEach((sourceJs) => {
                 const outputName = path.basename(sourceJs);
                 const outputDirName = path.dirname(sourceJs).replace(src_path, build_path);
-
-                console.log(`compiling ${sourceJs} to ${outputDirName}/${outputName}`);
                 jsCompiler({sourceJs, outputDirName, outputName});
             });
         }
