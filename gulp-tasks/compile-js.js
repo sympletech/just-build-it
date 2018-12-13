@@ -5,7 +5,7 @@ const jsCompiler = require('../compilers/js-compiler');
 
 const config = require('../config');
 
-gulp.task('compile-js', () => {
+gulp.task('build-js', () => {
     config.builds.forEach((buildConfig) => {
         const jsGlob = `${buildConfig.src_path}/${buildConfig.js_glob}`;
         buildJsFiles({jsGlob, src_path: buildConfig.src_path, build_path: buildConfig.build_path, minify: true});

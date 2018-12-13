@@ -6,7 +6,7 @@ const scssCompiler = require('../compilers/scss-compiler');
 const config = require('../config');
 
 
-gulp.task('compile-scss', () => {
+gulp.task('build-scss', () => {
 	config.builds.forEach((buildConfig) => {
 		const scssGlob = `${buildConfig.src_path}/${buildConfig.scss_glob}`;
 		buildScssFiles({scssGlob, src_path: buildConfig.src_path, build_path: buildConfig.build_path});
