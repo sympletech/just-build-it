@@ -29,7 +29,7 @@ function buildJsFiles({jsGlob, src_path, build_path}) {
             jsFiles.forEach((sourceJs) => {
                 const outputName = path.basename(sourceJs);
                 const outputDirName = path.dirname(sourceJs).replace(src_path, build_path);
-                jsCompiler({sourceJs, outputDirName, outputName});
+                jsCompiler({sourceJs, outputDirName, outputName, minify: false});
             });
         }
     });
