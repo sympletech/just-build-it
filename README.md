@@ -6,6 +6,8 @@ Meant to be Simple and no frills
 
 Some configuration options exist however they are minimal, if you have specific needs building tool chains is actually pretty fun and WebPack is infiniatly configurable.
 
+By default the builder will compile every .js file and .scss file (not starting with a _) in the src folder to the dist folder.  This can be modified using the js and scss glob settings in the config file which is explained below.
+
 # Install
 
 ```
@@ -18,7 +20,7 @@ Add the following 2 scripts to your package.json
 
 ```javascript
   "scripts": {
-    "dev": "just-build-it",
+    "start": "just-build-it",
     "build": "just-build-it build"
   }
 ```
@@ -80,22 +82,16 @@ Placing multiple entries in the builds folder of the config will start multiple 
 
 # Under the hood
 
-This toolchain is using Rollup.js with the following plugins:
+To compile JavaScript this toolchain is using Webpack with babel-loader and the following presets
 
-rollup-plugin-json
+['@babel/preset-env', 'react-app']
 
-rollup-plugin-node-resolve
-
-rollup-plugin-commonjs
-
-rollup-plugin-babel
-
-@babel/preset-env
-
-SourceMaps are built using gulp-sourcemaps
-
-SCSS is compiled using gulp-sass
+To compile SCSS this toolchain is using using gulp-sass
 
 And it's SourceMaps are generated using gulp-sourcemaps as well
 
 It's all wrapped in a few Gulp tasks
+
+# Motivation
+
+Make it symple to get started on projects, this build won't work for everything but it may work for alot of things

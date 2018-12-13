@@ -1,6 +1,6 @@
 {
   "name": "just-build-it",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "description": "A reusable builder to compile es6 and scss from a source directory into a destination directory",
   "bin": {
     "just-build-it": "bin/just-build-it.js"
@@ -18,9 +18,14 @@
     "url": "git+https://github.com/sympletech/just-build-it.git"
   },
   "keywords": [
+    "webpack",
+    "gulp",
     "es6",
     "build",
-    "scss"
+    "scss",
+    "live-reload",
+    "development",
+    "tool-chain"
   ],
   "author": "Daniel A. Lewis",
   "license": "ISC",
