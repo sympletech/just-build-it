@@ -7,7 +7,7 @@
   },
   "main": "bin/just-build-it.js",
   "scripts": {
-    "test": "mocha",
+    "test": "mocha ./test/**/*.js",
     "start": "just-build-it",
     "build": "just-build-it build",
     "watch": "just-build-it watch",

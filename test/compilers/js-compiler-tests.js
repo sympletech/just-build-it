@@ -6,11 +6,11 @@ const {promisify} = require('util');
 const stat = promisify(fs.stat);
 const unlink = promisify(fs.unlink);
 
-const jsCompiler = require('../compilers/js-compiler');
+const jsCompiler = require('../../compilers/js-compiler');
 
 it('should-build-a-basic-js-file', async () => {
     try {
-        const workingDir = `${path.resolve(__dirname, '../test_src/js/should-build-a-basic-js-file')}`;
+        const workingDir = `${path.resolve(__dirname, '../../test_src/js-compiler/should-build-a-basic-js-file')}`;
         await jsCompiler({
             sourceJs: `${workingDir}/test.js`,
             outputDirName: `${workingDir}`,
