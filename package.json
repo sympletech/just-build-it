@@ -51,5 +51,9 @@
     "npm": "^6.4.1",
     "require-dir": "^1.2.0",
     "webpack": "^4.27.1"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0"
   }
 }
