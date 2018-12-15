@@ -30,7 +30,7 @@ function jsCompiler({sourceJs, outputDirName, outputName, minify}) {
         if (err || stats.hasErrors()) {
             console.log('***********************');
             console.log(`ERROR COMPILING ${sourceJs}`);
-            console.log(stats);
+            console.log(stats.compilation.errors);
             console.log('***********************');
         }
     });
