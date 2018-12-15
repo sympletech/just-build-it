@@ -6,7 +6,7 @@ const {promisify} = require('util');
 const stat = promisify(fs.stat);
 const unlink = promisify(fs.unlink);
 
-const {buildScssFiles, buildScss, watchScss} = require('../../gulp-tasks/compile-scss');
+const {buildScssFiles, buildScss} = require('../../gulp-tasks/compile-scss');
 
 it('should-buildScssFiles', async () => {
     try {
