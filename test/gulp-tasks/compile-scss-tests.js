@@ -12,7 +12,7 @@ it('should-buildScssFiles', async () => {
     try {
         const workingDir = `${path.resolve(__dirname, '../../test_src/compile-scss/should-buildScssFiles')}`;
         await buildScssFiles({
-            scssGlob: 'test.scss',
+            scss_glob: 'test.scss',
             src_path: workingDir,
             build_path: path.resolve(workingDir)
         });
