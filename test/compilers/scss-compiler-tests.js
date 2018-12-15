@@ -24,6 +24,6 @@ it('should-build-a-basic-scss-file', async () => {
         await unlink(`${workingDir}/test.css`);
         await unlink(`${workingDir}/test.css.map`);
     } catch (err) {
-        expect(err).to.be(undefined);
+        expect(err).to.equal(undefined);
     }
 });

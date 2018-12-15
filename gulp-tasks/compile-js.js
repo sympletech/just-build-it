@@ -9,11 +9,11 @@ const config = require('../config');
 
 const buildJsFiles = ({js_glob, src_path, build_path, minify}) => {
     console.log(`Building Javascript ${(new Date()).toTimeString()}`);
-    const jsGlobArray = toGlobArray({js_glob, src_path});
+    const jsGlobArray = toGlobArray({glob_def: js_glob, src_path});
     const jsFiles = glob.sync(jsGlobArray);
     const buildPromises = jsFiles.map((sourceJs) => {
         const outputName = path.basename(sourceJs);
-        return jsCompiler({sourceJs, outputDirName: build_path, outputName, minify});
+        return jsCompiler({sourceJs, outputDirName: path.resolve(build_path), outputName, minify});
     });
     return Promise.all(buildPromises);
 };

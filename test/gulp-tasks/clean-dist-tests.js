@@ -21,6 +21,6 @@ it('should-clean-dist', async () => {
             expect(true).to.be.true;
         }
     } catch (err) {
-        expect(err).to.be(undefined);
+        expect(err).to.equal(undefined);
     }
 });

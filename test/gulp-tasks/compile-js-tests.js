@@ -6,7 +6,7 @@ const {promisify} = require('util');
 const stat = promisify(fs.stat);
 const unlink = promisify(fs.unlink);
 
-const {buildJsFiles, buildJs, watchJs} = require('../../gulp-tasks/compile-js');
+const {buildJsFiles, buildJs} = require('../../gulp-tasks/compile-js');
 
 it('should-buildJsFiles', async () => {
     try {
@@ -23,7 +23,7 @@ it('should-buildJsFiles', async () => {
 
         await unlink(`${workingDir}/build/test.js`);
     } catch (err) {
-        expect(err).to.be(undefined);
+        expect(err).to.equal(undefined);
     }
 });
 
@@ -41,6 +41,6 @@ it('should-buildJs', async () => {
 
         await unlink(`${workingDir}/build/test.js`);
     } catch (err) {
-        expect(err).to.be(undefined);
+        expect(err).to.equal(undefined);
     }
 });

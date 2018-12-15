@@ -23,6 +23,6 @@ it('should-build-a-basic-js-file', async () => {
 
         await unlink(`${workingDir}/build.js`);
     } catch (err) {
-        expect(err).to.be(undefined);
+        expect(err).to.equal(undefined);
     }
 });

@@ -8,14 +8,14 @@ const moveRemove = (path, globDef) => {
     return globResult;
 };
 
-const toGlobArray = ({js_glob, src_path}) => {
-    let jsGlob;
-    if (Array.isArray(js_glob)) {
-        jsGlob = js_glob.map((jGlob) => (moveRemove(src_path, jGlob)));
+const toGlobArray = ({glob_def, src_path}) => {
+    let globArrayDef;
+    if (Array.isArray(glob_def)) {
+        globArrayDef = glob_def.map((jGlob) => (moveRemove(src_path, jGlob)));
     } else {
-        jsGlob = moveRemove(src_path, js_glob);
+        globArrayDef = moveRemove(src_path, glob_def);
     }
-    return jsGlob;
+    return globArrayDef;
 };
 
 module.exports = {moveRemove, toGlobArray};
