@@ -21,7 +21,25 @@ it('should-buildJsFiles', async () => {
         const fileStats = await stat(`${workingDir}/build/test.js`);
         expect(fileStats).to.not.be.null;
 
-        await unlink(`${workingDir}/build/test.js`);        
+        await unlink(`${workingDir}/build/test.js`);
+    } catch (err) {
+        expect(err).to.be(undefined);
+    }
+});
+
+it('should-buildJs', async () => {
+    try {
+        const workingDir = `${path.resolve(__dirname, '../../test_src/compile-js/should-buildJs')}`;
+        await buildJs([{
+            js_glob: 'test.js',
+            src_path: workingDir,
+            build_path: path.resolve(workingDir, './build')
+        }]);
+
+        const fileStats = await stat(`${workingDir}/build/test.js`);
+        expect(fileStats).to.not.be.null;
+
+        await unlink(`${workingDir}/build/test.js`);
     } catch (err) {
         expect(err).to.be(undefined);
     }
