@@ -4,7 +4,6 @@ const fs = require('fs-extra');
 
 const {promisify} = require('util');
 const stat = promisify(fs.stat);
-// const writeFile = promisify(fs.writeFile);
 
 const {cleanDist} = require('../../gulp-tasks/clean-dist');
 

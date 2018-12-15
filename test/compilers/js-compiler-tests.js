@@ -13,7 +13,7 @@ it('should-build-a-basic-js-file', async () => {
         const workingDir = `${path.resolve(__dirname, '../../test_src/js-compiler/should-build-a-basic-js-file')}`;
         await jsCompiler({
             sourceJs: `${workingDir}/test.js`,
-            outputDirName: `${workingDir}`,
+            outputDirName: workingDir,
             outputName: 'build.js',
             minify: false
         });
