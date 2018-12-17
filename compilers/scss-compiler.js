@@ -25,4 +25,4 @@ function scssCompiler({sourceFolder, sourceFile, destFolder}) {
 	});
 }
 
-module.exports = scssCompiler;
+module.exports = {scssCompiler};

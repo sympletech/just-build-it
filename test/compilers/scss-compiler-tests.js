@@ -6,7 +6,7 @@ const {promisify} = require('util');
 const stat = promisify(fs.stat);
 const unlink = promisify(fs.unlink);
 
-const scssCompiler = require('../../compilers/scss-compiler');
+const {scssCompiler} = require('../../compilers/scss-compiler');
 
 it('should-build-a-basic-scss-file', async () => {
     try {

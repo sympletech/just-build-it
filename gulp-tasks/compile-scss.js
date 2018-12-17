@@ -3,7 +3,7 @@ const glob = require("glob-all");
 const path = require("path");
 
 const {toGlobArray} = require('../utils/utils');
-const scssCompiler = require('../compilers/scss-compiler');
+const {scssCompiler} = require('../compilers/scss-compiler');
 
 const config = require('../config');
 

@@ -1,7 +1,21 @@
-const webpack = require("webpack");
+const webpack = require('webpack');
 const path = require('path');
+const babel = require('@babel/core');
+const fs = require('fs-extra');
 
-function jsCompiler({sourceJs, outputDirName, outputName, minify}) {
+async function jsCompiler({sourceJs, sourcePath, outputDirName, outputName, minify}) {
+    try {
+        await compileWithWebpack({sourceJs, outputDirName, outputName, minify});
+    } catch (err) {
+        try {
+            await compileWithBabel({sourceJs, sourcePath, outputDirName});
+        } catch (err) {
+            console.error(`Unable to Compile ${sourceJs}`);
+        }
+    }
+}
+
+function compileWithWebpack({sourceJs, outputDirName, outputName, minify}) {
     return new Promise((resolve, reject) => {
         process.env.NODE_ENV = minify ? 'production' : 'development';
         webpack({
@@ -29,8 +43,8 @@ function jsCompiler({sourceJs, outputDirName, outputName, minify}) {
         }, (err, stats) => {
             if (err || stats.hasErrors()) {
                 console.log('***********************');
-                console.log(`ERROR COMPILING ${sourceJs}`);
-                console.log(stats.compilation.errors);
+                console.log(`ERROR WEBPACKING ${sourceJs} - Tring Babel`);
+                console.log(stats.compilation.errors.map((err) => err.message).join('\n'));
                 console.log('***********************');
                 reject(stats.compilation.errors);
             } else {
@@ -40,4 +54,28 @@ function jsCompiler({sourceJs, outputDirName, outputName, minify}) {
     });
 }
 
-module.exports = jsCompiler;
+function compileWithBabel({sourceJs, sourcePath, outputDirName, outputName}) {
+    return new Promise(async (resolve, reject) => {
+        babel.transformFile(sourceJs, {
+            cwd: sourcePath,
+            filename: outputName,
+            presets: ['@babel/preset-env']
+        }, async (err, result) => {
+            if (err) {
+                reject(err);
+            }
+
+            const saveAs = path.resolve(outputDirName, `./${outputName}`);
+            await fs.ensureFile(saveAs);
+            fs.writeFile(saveAs, result.code, 'utf8', (err) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve();
+                }
+            });
+        });
+    });
+}
+
+module.exports = {jsCompiler, compileWithWebpack, compileWithBabel};
