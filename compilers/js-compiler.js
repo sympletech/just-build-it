@@ -3,12 +3,16 @@ const path = require('path');
 const babel = require('@babel/core');
 const fs = require('fs-extra');
 
+const {promisify} = require('util');
+const unlink = promisify(fs.unlink);
+
 async function jsCompiler({sourceJs, sourcePath, outputDirName, outputName, minify}) {
     try {
         await compileWithWebpack({sourceJs, outputDirName, outputName, minify});
     } catch (err) {
         try {
-            await compileWithBabel({sourceJs, sourcePath, outputDirName});
+            await unlink(path.resolve(outputDirName, `./${outputName}`));
+            await compileWithBabel({sourceJs, sourcePath, outputDirName, outputName});
         } catch (err) {
             console.error(`Unable to Compile ${sourceJs}`);
         }

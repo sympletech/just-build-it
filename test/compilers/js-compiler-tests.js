@@ -49,22 +49,22 @@ it('should-compile-with-babel', async () => {
 });
 
 
-// it('should-just-babel-problem-files', async () => {
-//     try {
-//         const workingDir = `${path.resolve(__dirname, '../../test_src/js-compiler/should-just-babel-problem-files')}`;
-//         await jsCompiler({
-//             sourceJs: `${workingDir}/test.js`,
-//             sourcePath: workingDir,
-//             outputDirName: `${workingDir}/build`,
-//             outputName: 'test.js',
-//             minify: false
-//         });
+it('should-just-babel-problem-files', async () => {
+    try {
+        const workingDir = `${path.resolve(__dirname, '../../test_src/js-compiler/should-just-babel-problem-files')}`;
+        await jsCompiler({
+            sourceJs: `${workingDir}/test.js`,
+            sourcePath: workingDir,
+            outputDirName: `${workingDir}/build`,
+            outputName: 'test.js',
+            minify: false
+        });
 
-//         const fileStats = await stat(`${workingDir}/build/test.js`);
-//         expect(fileStats).to.not.be.null;
+        const fileStats = await stat(`${workingDir}/build/test.js`);
+        expect(fileStats).to.not.be.null;
 
-//         await unlink(`${workingDir}/build/test.js`);
-//     } catch (err) {
-//         expect(err).to.equal(undefined);
-//     }
-// });
+        await unlink(`${workingDir}/build/test.js`);
+    } catch (err) {
+        expect(err).to.equal(undefined);
+    }
+});
