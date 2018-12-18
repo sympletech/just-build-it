@@ -7,20 +7,22 @@ const stat = promisify(fs.stat);
 
 const {cleanDist} = require('../../gulp-tasks/clean-dist');
 
-it('should-clean-dist', async () => {
-    try {
-        const workingDir = `${path.resolve(__dirname, '../../test_src/clean-dist/should-clean-dist')}`;
-        const testFile = `${path.resolve(workingDir, './test.txt')}`;
-        await fs.ensureFile(testFile);
-        await cleanDist([{"build_path": workingDir}]);
-
+describe('clean-dist', () => {
+    it('should-clean-dist', async () => {
         try {
-            await stat(testFile);
-            expect.fail("File was not deleted");
+            const workingDir = `${path.resolve(__dirname, '../../test_src/clean-dist/should-clean-dist')}`;
+            const testFile = `${path.resolve(workingDir, './test.txt')}`;
+            await fs.ensureFile(testFile);
+            await cleanDist([{"build_path": workingDir}]);
+
+            try {
+                await stat(testFile);
+                expect.fail("File was not deleted");
+            } catch (err) {
+                expect(true).to.be.true;
+            }
         } catch (err) {
-            expect(true).to.be.true;
+            expect(err).to.equal(undefined);
         }
-    } catch (err) {
-        expect(err).to.equal(undefined);
-    }
+    });
 });
