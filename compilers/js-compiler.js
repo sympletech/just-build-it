@@ -14,7 +14,12 @@ async function jsCompiler({sourceJs, sourcePath, outputDirName, outputName, mini
             await unlink(path.resolve(outputDirName, `./${outputName}`));
             await compileWithBabel({sourceJs, sourcePath, outputDirName, outputName});
         } catch (err) {
-            console.error(`Unable to Compile ${sourceJs}`);
+            try {
+                await unlink(path.resolve(outputDirName, `./${outputName}`));
+                await copyFileAsIsToDest({sourceJs, sourcePath, outputDirName});
+            } catch (err) {
+                console.error(`Unable to Compile ${sourceJs}`);
+            }
         }
     }
 }
@@ -82,4 +87,10 @@ function compileWithBabel({sourceJs, sourcePath, outputDirName, outputName}) {
     });
 }
 
-module.exports = {jsCompiler, compileWithWebpack, compileWithBabel};
+function copyFileAsIsToDest({sourceJs, sourcePath, outputDirName}) {
+    const savePath = path.resolve(sourceJs).replace(path.resolve(sourcePath), '');
+    const destFile = `${path.resolve(outputDirName)}${savePath}`;
+    return fs.copy(sourceJs, destFile);
+}
+
+module.exports = {jsCompiler, compileWithWebpack, compileWithBabel, copyFileAsIsToDest};

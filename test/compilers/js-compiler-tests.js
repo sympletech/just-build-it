@@ -6,7 +6,7 @@ const {promisify} = require('util');
 const stat = promisify(fs.stat);
 const unlink = promisify(fs.unlink);
 
-const {jsCompiler, compileWithBabel} = require('../../compilers/js-compiler');
+const {jsCompiler, compileWithBabel, copyFileAsIsToDest} = require('../../compilers/js-compiler');
 
 describe('js-compiler', () => {
     it('should-build-a-basic-js-file', async () => {
@@ -27,8 +27,6 @@ describe('js-compiler', () => {
             expect(err).to.equal(undefined);
         }
     });
-
-
 
     it('should-compile-with-babel', async () => {
         try {
@@ -59,6 +57,24 @@ describe('js-compiler', () => {
                 outputDirName: `${workingDir}/build`,
                 outputName: 'test.js',
                 minify: false
+            });
+
+            const fileStats = await stat(`${workingDir}/build/test.js`);
+            expect(fileStats).to.not.be.null;
+
+            await unlink(`${workingDir}/build/test.js`);
+        } catch (err) {
+            expect(err).to.equal(undefined);
+        }
+    });
+
+    it('should-just-copy-files-it-cant-babel', async () => {
+        try {
+            const workingDir = `${path.resolve(__dirname, '../../test_src/compilers/js-compiler/should-just-copy-files-it-cant-babel')}`;
+            await copyFileAsIsToDest({
+                sourceJs: `${workingDir}/test.js`,
+                sourcePath: workingDir,
+                outputDirName: `${workingDir}/build`
             });
 
             const fileStats = await stat(`${workingDir}/build/test.js`);
