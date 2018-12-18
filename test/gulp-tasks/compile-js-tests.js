@@ -44,3 +44,21 @@ it('should-buildJs', async () => {
         expect(err).to.equal(undefined);
     }
 });
+
+it('should-handle-sub-folders', async () => {
+    try {
+        const workingDir = `${path.resolve(__dirname, '../../test_src/compile-js/should-handle-sub-folders')}`;
+        await buildJs([{
+            js_glob: '**/*.js',
+            src_path: workingDir,
+            build_path: path.resolve(workingDir, './build')
+        }]);
+
+        const fileStats = await stat(`${workingDir}/build/sub/test.js`);
+        expect(fileStats).to.not.be.null;
+
+        await unlink(`${workingDir}/build/sub/test.js`);
+    } catch (err) {
+        expect(err).to.equal(undefined);
+    }
+});

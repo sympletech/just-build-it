@@ -13,7 +13,10 @@ const buildJsFiles = ({js_glob, src_path, build_path, minify}) => {
     const jsFiles = glob.sync(jsGlobArray);
     const buildPromises = jsFiles.map((sourceJs) => {
         const outputName = path.basename(sourceJs);
-        return jsCompiler({sourceJs, outputDirName: path.resolve(build_path), outputName, minify});
+        const fullSourcePath = path.resolve(path.dirname(sourceJs));
+        const subFolder = fullSourcePath.replace(path.resolve(src_path), '');
+        const outputDirName = path.resolve(build_path, `./${subFolder}`);
+        return jsCompiler({sourceJs, outputDirName, outputName, minify});
     });
     return Promise.all(buildPromises);
 };
