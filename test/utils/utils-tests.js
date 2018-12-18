@@ -10,7 +10,7 @@ describe('utils', () => {
 
     it('toGlobArray-should-return-single-glob', () => {
         const globArray = utils.toGlobArray({glob_def: 'test.scss', src_path: 'my/path'});
-        expect(globArray).to.equal(['my/path/test.scss']);
+        expect(JSON.stringify(globArray)).to.equal(JSON.stringify(['my/path/test.scss']));
     });
 
     it('getFileList-should-exclude-files', () => {
