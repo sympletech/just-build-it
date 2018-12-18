@@ -8,7 +8,7 @@ Some configuration options exist however they are minimal, if you have specific 
 
 By default the builder will compile every .js file and .scss file (not starting with a _) in the src folder to the dist folder.  This can be modified using the js and scss glob settings in the config file which is explained below.
 
-
+[![Build Status](https://travis-ci.com/sympletech/just-build-it.svg?branch=master)](https://travis-ci.com/sympletech/just-build-it)
 
 
 # Install
