@@ -25,7 +25,9 @@ gulp.task('build-js', () => buildJs(config.builds));
 const watchJs = (builds) => {
     console.log('Watching Javascript Files');
     builds.forEach(({js_glob, src_path, build_path}) => {
-        gulp.watch(`${src_path}/**/*.js`, () => {
+        gulp.watch(`${src_path}/**/*.js`, (evt) => {
+            const fileName = evt.path;
+
             buildJsFiles({js_glob, src_path, build_path, minify: false});
         });
     });

@@ -1,5 +1,7 @@
 const path = require('path');
 const glob = require("glob-all");
+const fs = require('fs-extra');
+const readline = require('readline');
 
 const moveRemove = (path, globDef) => {
     let globResult = "";
@@ -42,4 +44,37 @@ const getBuildPath = ({source_file, src_path, build_path}) => {
     return outputDirName;
 };
 
-module.exports = {moveRemove, toGlobArray, getFileList, lookupGlob, getBuildPath};
+const findFilesIncluding = async ({source_file, src_path, glob_def}) => {
+    const fileName = path.basename(source_file)
+        .replace('.js', '')
+        .toLowerCase();
+    const potentialFiles = lookupGlob({glob_def, src_path});
+    const fileList = [];
+
+    await Promise.all(
+        potentialFiles.map((pFile) => new Promise((resolve) => {
+            const lineReader = readline.createInterface({
+                input: fs.createReadStream(pFile)
+            });
+            lineReader.on('line', (line) => {
+                if (line.indexOf('import') === 0) {
+                    const from = line.split('from')[1];
+                    const includesFile = from.toLowerCase().indexOf(fileName) > -1;
+                    if (includesFile) {
+                        fileList.push(pFile);
+                        lineReader.close();
+                        resolve();
+                    }
+                }
+            });
+            lineReader.on('close', () => {
+                resolve();
+            });
+        }))
+    );
+
+    return fileList;
+};
+
+
+module.exports = {moveRemove, toGlobArray, getFileList, lookupGlob, getBuildPath, findFilesIncluding};

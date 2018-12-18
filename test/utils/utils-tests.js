@@ -19,14 +19,26 @@ describe('utils', () => {
             '!./test_src/utils/getFileList-should-exclude-files/**/*.txt'
         ]);
         expect(fileList.length).to.equal(1);
-    }); 
-    
+    });
+
     it('getFileList-should-exclude-files-reverse', () => {
         const fileList = utils.getFileList([
             '!./test_src/utils/getFileList-should-exclude-files/**/*.txt',
             './test_src/utils/getFileList-should-exclude-files/**/*'
         ]);
         expect(fileList.length).to.equal(1);
-    });        
+    });
+
+    it('find-files-including-should-find-files', async () => {
+        const workingDir = `${path.resolve(__dirname, '../../test_src/utils/find-files-including-should-find-files')}`;
+
+        const fileList = await utils.findFilesIncluding({
+            source_file: path.resolve(workingDir, './lib.js'),
+            src_path: workingDir,
+            glob_def: '**/*.js'
+        });
+
+        expect(fileList.length).to.equal(1);
+    });
 });
 
