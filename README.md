@@ -80,6 +80,28 @@ create a config in the root of your project named
 
 Placing multiple entries in the builds folder of the config will start multiple builders (good for projects with lots of files)
 
+# Using GLOB Arrays
+
+Any of the globs can be provided an array allowing you more control over what files get handled in what way
+
+for example:
+
+```javascript
+    "js_glob": [
+        "**/*.js",
+        "!/3rdPartyLibs/**/*.js",
+    ],
+    "static_files_glob": [
+        "/**/*.html",
+        "/**/*.css",
+        "/**/*.jpg",
+        "/**/*.gif",
+        "/**/*.png",
+        "/**/*.svg",
+        "/3rdPartyLibs/**/*.js",
+    ]       
+```
+
 # Under the hood
 
 To compile JavaScript this toolchain is using Webpack with babel-loader and the following presets
@@ -94,4 +116,8 @@ It's all wrapped in a few Gulp tasks
 
 # Motivation
 
-Make it symple to get started on projects, this build won't work for everything but it may work for alot of things
+We have many projects that have a collection of js and scss files in them that need to be compiled and copied in place.  I found that there was alot of diffrent ways people were building these projects, and worse that each developer who added in their own build spent a lot of time doing it, and in many cases did not even understand how their builds worked.
+
+This package is meant to make it symple to get started on projects, this build won't work for everything but it may work for alot of things
+
+If you want to use it like webpack and have it build from a single entry point just adjust the js_glob in your config file
