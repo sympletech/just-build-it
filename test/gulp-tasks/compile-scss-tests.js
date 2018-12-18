@@ -45,4 +45,24 @@ describe('compile-scss', () => {
             expect(err).to.equal(undefined);
         }
     });
+
+
+    it('should-preserve-subfolders', async () => {
+        try {
+            const workingDir = `${path.resolve(__dirname, '../../test_src/gulp-tasks/compile-scss/should-preserve-subfolders')}`;
+            await buildScssFiles({
+                scss_glob: '**/*.scss', 
+                src_path: workingDir, 
+                build_path: path.resolve(workingDir, './build')
+            });
+    
+            const fileStats = await stat(`${workingDir}/build/sub-folder/test.css`);
+            expect(fileStats).to.not.be.null;
+    
+            await unlink(`${workingDir}/build/sub-folder/test.css`);
+            await unlink(`${workingDir}/build/sub-folder/test.css.map`);
+        } catch (err) {
+            expect(err).to.equal(undefined);
+        }
+    });
 });

@@ -10,9 +10,16 @@ const buildScssFiles = ({scss_glob, src_path, build_path}) => {
 	const scssFiles = lookupGlob({glob_def: scss_glob, src_path});
 
 	return Promise.all(scssFiles.map((sourceScss) => {
+		const outputName = path.basename(sourceScss);
+		const fullSourcePath = path.resolve(path.dirname(sourceScss));
+		const subFolder = fullSourcePath.replace(path.resolve(src_path), '');
+		const outputDirName = path.resolve(build_path, `./${subFolder}`);
+
+
+
 		const sourceFile = path.basename(sourceScss);
 		const sourceFolder = path.dirname(sourceScss);
-		return scssCompiler({sourceFolder, sourceFile, destFolder: path.resolve(build_path)});
+		return scssCompiler({sourceFolder, sourceFile, destFolder: outputDirName});
 	}));
 };
 
