@@ -1,7 +1,7 @@
 const gulp = require("gulp");
 const path = require("path");
 
-const {lookupGlob} = require('../utils/utils');
+const {lookupGlob, getBuildPath} = require('../utils/utils');
 const {jsCompiler} = require('../compilers/js-compiler');
 
 const config = require('../config');
@@ -11,9 +11,7 @@ const buildJsFiles = ({js_glob, src_path, build_path, minify}) => {
     const jsFiles = lookupGlob({glob_def: js_glob, src_path});
     return Promise.all(jsFiles.map((sourceJs) => {
         const outputName = path.basename(sourceJs);
-        const fullSourcePath = path.resolve(path.dirname(sourceJs));
-        const subFolder = fullSourcePath.replace(path.resolve(src_path), '');
-        const outputDirName = path.resolve(build_path, `./${subFolder}`);
+        const outputDirName = getBuildPath({source_file: sourceJs, src_path, build_path});
         return jsCompiler({sourceJs, outputDirName, outputName, minify});
     }));
 };

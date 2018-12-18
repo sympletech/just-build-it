@@ -1,7 +1,7 @@
 const gulp = require("gulp");
 const path = require("path");
 
-const {lookupGlob} = require('../utils/utils');
+const {lookupGlob, getBuildPath} = require('../utils/utils');
 const {scssCompiler} = require('../compilers/scss-compiler');
 
 const config = require('../config');
@@ -10,13 +10,7 @@ const buildScssFiles = ({scss_glob, src_path, build_path}) => {
 	const scssFiles = lookupGlob({glob_def: scss_glob, src_path});
 
 	return Promise.all(scssFiles.map((sourceScss) => {
-		const outputName = path.basename(sourceScss);
-		const fullSourcePath = path.resolve(path.dirname(sourceScss));
-		const subFolder = fullSourcePath.replace(path.resolve(src_path), '');
-		const outputDirName = path.resolve(build_path, `./${subFolder}`);
-
-
-
+		const outputDirName = getBuildPath({source_file: sourceScss, src_path, build_path});
 		const sourceFile = path.basename(sourceScss);
 		const sourceFolder = path.dirname(sourceScss);
 		return scssCompiler({sourceFolder, sourceFile, destFolder: outputDirName});

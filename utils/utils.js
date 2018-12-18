@@ -1,3 +1,4 @@
+const path = require('path');
 const glob = require("glob-all");
 
 const moveRemove = (path, globDef) => {
@@ -34,4 +35,11 @@ const lookupGlob = ({glob_def, src_path}) => {
     return fileList;
 };
 
-module.exports = {moveRemove, toGlobArray, getFileList, lookupGlob};
+const getBuildPath = ({source_file, src_path, build_path}) => {
+    const fullSourcePath = path.resolve(path.dirname(source_file));
+    const subFolder = fullSourcePath.replace(path.resolve(src_path), '');
+    const outputDirName = path.resolve(build_path, `./${subFolder}`);
+    return outputDirName;
+};
+
+module.exports = {moveRemove, toGlobArray, getFileList, lookupGlob, getBuildPath};
