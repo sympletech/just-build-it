@@ -7,6 +7,7 @@ const {scssCompiler} = require('../compilers/scss-compiler');
 const config = require('../config');
 
 const buildScssFiles = ({scss_glob, src_path, build_path}) => {
+	console.log(`Building Scss`, src_path, scss_glob);
 	const scssFiles = lookupGlob({glob_def: scss_glob, src_path});
 
 	return Promise.all(scssFiles.map((sourceScss) => {
