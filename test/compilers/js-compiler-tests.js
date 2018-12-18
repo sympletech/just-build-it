@@ -11,7 +11,7 @@ const {jsCompiler, compileWithBabel} = require('../../compilers/js-compiler');
 describe('js-compiler', () => {
     it('should-build-a-basic-js-file', async () => {
         try {
-            const workingDir = `${path.resolve(__dirname, '../../test_src/js-compiler/should-build-a-basic-js-file')}`;
+            const workingDir = `${path.resolve(__dirname, '../../test_src/compilers/js-compiler/should-build-a-basic-js-file')}`;
             await jsCompiler({
                 sourceJs: path.resolve(workingDir, './test.js'),
                 outputDirName: workingDir,
@@ -32,7 +32,7 @@ describe('js-compiler', () => {
 
     it('should-compile-with-babel', async () => {
         try {
-            const workingDir = `${path.resolve(__dirname, '../../test_src/js-compiler/should-compile-with-babel')}`;
+            const workingDir = `${path.resolve(__dirname, '../../test_src/compilers/js-compiler/should-compile-with-babel')}`;
             await compileWithBabel({
                 sourceJs: path.resolve(workingDir, './test.js'),
                 sourcePath: workingDir,
@@ -52,7 +52,7 @@ describe('js-compiler', () => {
 
     it('should-just-babel-problem-files', async () => {
         try {
-            const workingDir = `${path.resolve(__dirname, '../../test_src/js-compiler/should-just-babel-problem-files')}`;
+            const workingDir = `${path.resolve(__dirname, '../../test_src/compilers/js-compiler/should-just-babel-problem-files')}`;
             await jsCompiler({
                 sourceJs: `${workingDir}/test.js`,
                 sourcePath: workingDir,

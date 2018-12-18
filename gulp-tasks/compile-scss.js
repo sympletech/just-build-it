@@ -1,22 +1,19 @@
 const gulp = require("gulp");
-const glob = require("glob-all");
 const path = require("path");
 
-const {toGlobArray} = require('../utils/utils');
+const {lookupGlob} = require('../utils/utils');
 const {scssCompiler} = require('../compilers/scss-compiler');
 
 const config = require('../config');
 
 const buildScssFiles = ({scss_glob, src_path, build_path}) => {
-	const scssGlobArray = toGlobArray({glob_def: scss_glob, src_path});
-	const scssFiles = glob.sync(scssGlobArray);
+	const scssFiles = lookupGlob({glob_def: scss_glob, src_path});
 
-	const buildPromises = scssFiles.map((sourceScss) => {
+	return Promise.all(scssFiles.map((sourceScss) => {
 		const sourceFile = path.basename(sourceScss);
 		const sourceFolder = path.dirname(sourceScss);
 		return scssCompiler({sourceFolder, sourceFile, destFolder: path.resolve(build_path)});
-	});
-	return Promise.all(buildPromises);
+	}));
 };
 
 const buildScss = (builds) => Promise.all(

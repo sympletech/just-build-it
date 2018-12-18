@@ -1,24 +1,21 @@
 const gulp = require("gulp");
-const glob = require("glob-all");
 const path = require("path");
 
-const {toGlobArray} = require('../utils/utils');
+const {lookupGlob} = require('../utils/utils');
 const {jsCompiler} = require('../compilers/js-compiler');
 
 const config = require('../config');
 
 const buildJsFiles = ({js_glob, src_path, build_path, minify}) => {
     console.log(`Building Javascript ${(new Date()).toTimeString()}`);
-    const jsGlobArray = toGlobArray({glob_def: js_glob, src_path});
-    const jsFiles = glob.sync(jsGlobArray);
-    const buildPromises = jsFiles.map((sourceJs) => {
+    const jsFiles = lookupGlob({glob_def: js_glob, src_path});
+    return Promise.all(jsFiles.map((sourceJs) => {
         const outputName = path.basename(sourceJs);
         const fullSourcePath = path.resolve(path.dirname(sourceJs));
         const subFolder = fullSourcePath.replace(path.resolve(src_path), '');
         const outputDirName = path.resolve(build_path, `./${subFolder}`);
         return jsCompiler({sourceJs, outputDirName, outputName, minify});
-    });
-    return Promise.all(buildPromises);
+    }));
 };
 
 const buildJs = (builds) => Promise.all(

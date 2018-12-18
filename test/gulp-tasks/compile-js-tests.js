@@ -11,7 +11,7 @@ const {buildJsFiles, buildJs} = require('../../gulp-tasks/compile-js');
 describe('compile-js', () => {
     it('should-buildJsFiles', async () => {
         try {
-            const workingDir = `${path.resolve(__dirname, '../../test_src/compile-js/should-buildJsFiles')}`;
+            const workingDir = `${path.resolve(__dirname, '../../test_src/gulp-tasks/compile-js/should-buildJsFiles')}`;
             await buildJsFiles({
                 js_glob: 'test.js',
                 src_path: workingDir,
@@ -30,7 +30,7 @@ describe('compile-js', () => {
 
     it('should-buildJs', async () => {
         try {
-            const workingDir = `${path.resolve(__dirname, '../../test_src/compile-js/should-buildJs')}`;
+            const workingDir = `${path.resolve(__dirname, '../../test_src/gulp-tasks/compile-js/should-buildJs')}`;
             await buildJs([{
                 js_glob: 'test.js',
                 src_path: workingDir,
@@ -48,7 +48,7 @@ describe('compile-js', () => {
 
     it('should-handle-sub-folders', async () => {
         try {
-            const workingDir = `${path.resolve(__dirname, '../../test_src/compile-js/should-handle-sub-folders')}`;
+            const workingDir = `${path.resolve(__dirname, '../../test_src/gulp-tasks/compile-js/should-handle-sub-folders')}`;
             await buildJs([{
                 js_glob: '**/*.js',
                 src_path: workingDir,

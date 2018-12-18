@@ -10,7 +10,7 @@ const {cleanDist} = require('../../gulp-tasks/clean-dist');
 describe('clean-dist', () => {
     it('should-clean-dist', async () => {
         try {
-            const workingDir = `${path.resolve(__dirname, '../../test_src/clean-dist/should-clean-dist')}`;
+            const workingDir = `${path.resolve(__dirname, '../../test_src/gulp-tasks/clean-dist/should-clean-dist')}`;
             const testFile = `${path.resolve(workingDir, './test.txt')}`;
             await fs.ensureFile(testFile);
             await cleanDist([{"build_path": workingDir}]);

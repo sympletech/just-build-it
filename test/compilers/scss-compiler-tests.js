@@ -11,7 +11,7 @@ const {scssCompiler} = require('../../compilers/scss-compiler');
 describe('scss-compiler', () => {
     it('should-build-a-basic-scss-file', async () => {
         try {
-            const workingDir = `${path.resolve(__dirname, '../../test_src/scss-compiler/should-build-a-basic-scss-file')}`;
+            const workingDir = `${path.resolve(__dirname, '../../test_src/compilers/scss-compiler/should-build-a-basic-scss-file')}`;
             await scssCompiler(
                 {
                     sourceFolder: `${workingDir}`,

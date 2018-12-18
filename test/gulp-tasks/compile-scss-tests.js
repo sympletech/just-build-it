@@ -11,7 +11,7 @@ const {buildScssFiles, buildScss} = require('../../gulp-tasks/compile-scss');
 describe('compile-scss', () => {
     it('should-buildScssFiles', async () => {
         try {
-            const workingDir = `${path.resolve(__dirname, '../../test_src/compile-scss/should-buildScssFiles')}`;
+            const workingDir = `${path.resolve(__dirname, '../../test_src/gulp-tasks/compile-scss/should-buildScssFiles')}`;
             await buildScssFiles({
                 scss_glob: 'test.scss',
                 src_path: workingDir,
@@ -30,7 +30,7 @@ describe('compile-scss', () => {
     
     it('should-buildScss', async () => {
         try {
-            const workingDir = `${path.resolve(__dirname, '../../test_src/compile-scss/should-buildScss')}`;
+            const workingDir = `${path.resolve(__dirname, '../../test_src/gulp-tasks/compile-scss/should-buildScss')}`;
             await buildScss([{
                 scss_glob: 'test.scss',
                 src_path: workingDir,

@@ -1,3 +1,5 @@
+const glob = require("glob-all");
+
 const moveRemove = (path, globDef) => {
     let globResult = "";
     if (globDef.indexOf('!') > -1) {
@@ -13,9 +15,23 @@ const toGlobArray = ({glob_def, src_path}) => {
     if (Array.isArray(glob_def)) {
         globArrayDef = glob_def.map((jGlob) => (moveRemove(src_path, jGlob)));
     } else {
-        globArrayDef = moveRemove(src_path, glob_def);
+        globArrayDef = [moveRemove(src_path, glob_def)];
     }
     return globArrayDef;
 };
 
-module.exports = {moveRemove, toGlobArray};
+const getFileList = (globArray) => {
+    const includeStmts = globArray.filter((glb) => glb.indexOf('!') === -1);
+    const excludeStmts = globArray.filter((glb) => glb.indexOf('!') === 0);
+    const orderedGlob = [...includeStmts, ...excludeStmts];
+    const fileList = glob.sync(orderedGlob);
+    return fileList;
+};
+
+const lookupGlob = ({glob_def, src_path}) => {
+    const globArray = toGlobArray({glob_def, src_path});
+    const fileList = getFileList(globArray);
+    return fileList;
+};
+
+module.exports = {moveRemove, toGlobArray, getFileList, lookupGlob};

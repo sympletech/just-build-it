@@ -11,7 +11,7 @@ const {copyStaticFiles, copyStaticFilesTask} = require('../../gulp-tasks/copy-st
 describe('compile-static-files', () => {
     it('should-copyStaticFiles', async () => {
         try {
-            const workingDir = `${path.resolve(__dirname, '../../test_src/compile-static-files/should-copyStaticFiles')}`;
+            const workingDir = `${path.resolve(__dirname, '../../test_src/gulp-tasks/compile-static-files/should-copyStaticFiles')}`;
             await copyStaticFiles({
                 static_files_glob: 'test.html',
                 src_path: workingDir,
@@ -29,7 +29,7 @@ describe('compile-static-files', () => {
 
     it('should-copyStaticFilesTask', async () => {
         try {
-            const workingDir = `${path.resolve(__dirname, '../../test_src/compile-static-files/copyStaticFilesTask')}`;
+            const workingDir = `${path.resolve(__dirname, '../../test_src/gulp-tasks/compile-static-files/copyStaticFilesTask')}`;
             await copyStaticFilesTask([{
                 static_files_glob: 'test.html',
                 src_path: workingDir,
