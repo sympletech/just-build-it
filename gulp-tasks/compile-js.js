@@ -16,11 +16,12 @@ const buildJsFiles = ({js_glob, src_path, build_path, minify}) => {
     }));
 };
 
-const buildJs = (builds) => Promise.all(
+const buildJs = (builds, minify) => Promise.all(
     builds.map(({js_glob, src_path, build_path}) =>
-        buildJsFiles({js_glob, src_path, build_path, minify: true}))
+        buildJsFiles({js_glob, src_path, build_path, minify}))
 );
-gulp.task('build-js', () => buildJs(config.builds));
+gulp.task('build-js-dev', () => buildJs(config.builds, false));
+gulp.task('build-js', () => buildJs(config.builds, true));
 
 const watchJs = (builds) => {
     console.log('Watching Javascript Files');
