@@ -1,4 +1,5 @@
 const gulp = require("gulp");
+const plumber = require('gulp-plumber');
 const sass = require("gulp-sass");
 const sassGlob = require('gulp-sass-glob');
 const sourcemaps = require('gulp-sourcemaps');
@@ -6,6 +7,7 @@ const sourcemaps = require('gulp-sourcemaps');
 function scssCompiler({sourceFolder, sourceFile, destFolder}) {
 	return new Promise((resolve, reject) => {
 		gulp.src(`${sourceFolder}/${sourceFile}`, {base: sourceFolder})
+			.pipe(plumber())
 			.pipe(sourcemaps.init())
 			.pipe(sourcemaps.identityMap())
 			.pipe(sassGlob())
