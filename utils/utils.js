@@ -59,11 +59,13 @@ const findFilesIncluding = async ({source_file, src_path, glob_def}) => {
             lineReader.on('line', (line) => {
                 if (line.indexOf('import') === 0) {
                     const from = line.split('from')[1];
-                    const includesFile = from.toLowerCase().indexOf(fileName) > -1;
-                    if (includesFile) {
-                        fileList.push(pFile);
-                        lineReader.close();
-                        resolve();
+                    if (from) {
+                        const includesFile = from.toLowerCase().indexOf(fileName) > -1;
+                        if (includesFile) {
+                            fileList.push(pFile);
+                            lineReader.close();
+                            resolve();
+                        }
                     }
                 }
             });
