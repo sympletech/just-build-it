@@ -54,5 +54,18 @@ describe('utils', () => {
 
         expect(fileList.length).to.equal(2);
     });    
+
+    it('find-files-including-should-work-for-scss-too', async () => {
+        const workingDir = `${path.resolve(__dirname, '../../test_src/utils/find-files-including-should-work-for-scss-too')}`;
+
+        const fileList = await utils.findFilesIncluding({
+            fileType: 'scss',
+            source_file: path.resolve(workingDir, './module.scss'),
+            src_path: workingDir,
+            glob_def: '**/*.scss'
+        });
+
+        expect(fileList.length).to.equal(2);
+    });       
 });
 

@@ -46,7 +46,7 @@ const getBuildPath = ({source_file, src_path, build_path}) => {
 
 const findFilesIncluding = async ({source_file, src_path, glob_def, fileType}) => {
     const fileName = path.basename(source_file)
-        .replace('.js', '')
+        .replace(`.${fileType}`, '')
         .toLowerCase();
     const potentialFiles = lookupGlob({glob_def, src_path});
     const fileList = [];
@@ -57,12 +57,16 @@ const findFilesIncluding = async ({source_file, src_path, glob_def, fileType}) =
                 input: fs.createReadStream(pFile)
             });
             lineReader.on('line', async (line) => {
-                let includesFile = false;
-                switch (fileType) {
-                    case 'js':
-                        includesFile = checkJsImportLine({line, fileName});
-                        break;
-                }
+                const importDirective = (() => {
+                    switch (fileType) {
+                        case 'js':
+                            return 'import';
+                        case 'scss':
+                            return '@import';
+                    }
+                })();
+                const includesFile = line.indexOf(importDirective) === 0 && line.toLowerCase().indexOf(fileName) > -1;
+
                 if (includesFile) {
                     fileList.push(pFile);
                     lineReader.close();
@@ -84,16 +88,6 @@ const findFilesIncluding = async ({source_file, src_path, glob_def, fileType}) =
     }));
 
     return Array.from(fullFileList);
-
-    function checkJsImportLine({line, fileName}) {
-        if (line.indexOf('import') === 0) {
-            const from = line.split('from')[1];
-            if (from) {
-                return from.toLowerCase().indexOf(fileName) > -1;
-            }
-        }
-        return false;
-    }
 };
 
 
