@@ -47,6 +47,7 @@ const getBuildPath = ({source_file, src_path, build_path}) => {
 const findFilesIncluding = async ({source_file, src_path, glob_def, fileType}) => {
     const fileName = path.basename(source_file)
         .replace(`.${fileType}`, '')
+        .replace('_','')
         .toLowerCase();
     const potentialFiles = lookupGlob({glob_def, src_path});
     const fileList = [];
