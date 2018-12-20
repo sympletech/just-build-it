@@ -44,7 +44,7 @@ const getBuildPath = ({source_file, src_path, build_path}) => {
     return outputDirName;
 };
 
-const findFilesIncluding = async ({source_file, src_path, glob_def}) => {
+const findFilesIncluding = async ({source_file, src_path, glob_def, fileType}) => {
     const fileName = path.basename(source_file)
         .replace('.js', '')
         .toLowerCase();
@@ -57,16 +57,16 @@ const findFilesIncluding = async ({source_file, src_path, glob_def}) => {
                 input: fs.createReadStream(pFile)
             });
             lineReader.on('line', async (line) => {
-                if (line.indexOf('import') === 0) {
-                    const from = line.split('from')[1];
-                    if (from) {
-                        const includesFile = from.toLowerCase().indexOf(fileName) > -1;
-                        if (includesFile) {
-                            fileList.push(pFile);
-                            lineReader.close();
-                            resolve();
-                        }
-                    }
+                let includesFile = false;
+                switch (fileType) {
+                    case 'js':
+                        includesFile = checkJsImportLine({line, fileName});
+                        break;
+                }
+                if (includesFile) {
+                    fileList.push(pFile);
+                    lineReader.close();
+                    resolve();
                 }
             });
             lineReader.on('close', () => {
@@ -77,13 +77,23 @@ const findFilesIncluding = async ({source_file, src_path, glob_def}) => {
 
     const fullFileList = new Set(fileList);
     await Promise.all(fileList.map(async (pFile) => {
-        const additionalFiles = await findFilesIncluding({source_file: pFile, src_path, glob_def});
+        const additionalFiles = await findFilesIncluding({source_file: pFile, src_path, glob_def, fileType});
         additionalFiles.forEach((aFile) => {
             fullFileList.add(aFile);
         });
     }));
 
     return Array.from(fullFileList);
+
+    function checkJsImportLine({line, fileName}) {
+        if (line.indexOf('import') === 0) {
+            const from = line.split('from')[1];
+            if (from) {
+                return from.toLowerCase().indexOf(fileName) > -1;
+            }
+        }
+        return false;
+    }
 };
 
 

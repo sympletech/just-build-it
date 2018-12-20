@@ -28,7 +28,8 @@ const watchScss = (builds) => {
 	console.log('Watching Scss Files');
 	builds.forEach((buildConfig) => {
 		const {src_path, scss_glob, build_path} = buildConfig;
-		gulp.watch(`${src_path}/**/*.scss`, () => {
+		gulp.watch(`${src_path}/**/*.scss`, (evt) => {
+			const fileName = evt.path;
 			buildScssFiles({src_path, scss_glob, build_path});
 		});
 	});

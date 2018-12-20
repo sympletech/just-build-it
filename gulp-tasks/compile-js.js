@@ -29,6 +29,7 @@ const watchJs = (builds) => {
         gulp.watch(`${src_path}/**/*.js`, async (evt) => {
             const fileName = evt.path;
             const filesIncluding = await findFilesIncluding({
+                fileType: 'js',
                 source_file: evt.path,
                 src_path,
                 glob_def: js_glob

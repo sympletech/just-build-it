@@ -33,6 +33,7 @@ describe('utils', () => {
         const workingDir = `${path.resolve(__dirname, '../../test_src/utils/find-files-including-should-find-files')}`;
 
         const fileList = await utils.findFilesIncluding({
+            fileType: 'js',
             source_file: path.resolve(workingDir, './lib.js'),
             src_path: workingDir,
             glob_def: '**/*.js'
@@ -45,6 +46,7 @@ describe('utils', () => {
         const workingDir = `${path.resolve(__dirname, '../../test_src/utils/find-files-including-should-be-recurisive')}`;
 
         const fileList = await utils.findFilesIncluding({
+            fileType: 'js',
             source_file: path.resolve(workingDir, './lib.js'),
             src_path: workingDir,
             glob_def: '**/*.js'
