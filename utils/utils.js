@@ -56,7 +56,7 @@ const findFilesIncluding = async ({source_file, src_path, glob_def}) => {
             const lineReader = readline.createInterface({
                 input: fs.createReadStream(pFile)
             });
-            lineReader.on('line', (line) => {
+            lineReader.on('line', async (line) => {
                 if (line.indexOf('import') === 0) {
                     const from = line.split('from')[1];
                     if (from) {
@@ -75,7 +75,15 @@ const findFilesIncluding = async ({source_file, src_path, glob_def}) => {
         }))
     );
 
-    return fileList;
+    const fullFileList = new Set(fileList);
+    await Promise.all(fileList.map(async (pFile) => {
+        const additionalFiles = await findFilesIncluding({source_file: pFile, src_path, glob_def});
+        additionalFiles.forEach((aFile) => {
+            fullFileList.add(aFile);
+        });
+    }));
+
+    return Array.from(fullFileList);
 };
 
 

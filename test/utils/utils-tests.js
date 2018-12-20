@@ -40,5 +40,17 @@ describe('utils', () => {
 
         expect(fileList.length).to.equal(1);
     });
+
+    it('find-files-including-should-be-recurisive', async () => {
+        const workingDir = `${path.resolve(__dirname, '../../test_src/utils/find-files-including-should-be-recurisive')}`;
+
+        const fileList = await utils.findFilesIncluding({
+            source_file: path.resolve(workingDir, './lib.js'),
+            src_path: workingDir,
+            glob_def: '**/*.js'
+        });
+
+        expect(fileList.length).to.equal(2);
+    });    
 });
 

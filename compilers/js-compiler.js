@@ -52,7 +52,7 @@ function compileWithWebpack({sourceJs, outputDirName, outputName, minify}) {
         }, (err, stats) => {
             if (err || stats.hasErrors()) {
                 console.log('***********************');
-                console.log(`ERROR WEBPACKING ${sourceJs} - Tring Babel`);
+                console.log(`ERROR WEBPACKING ${sourceJs} - Trying Babel`);
                 console.log(stats.compilation.errors.map((err) => err.message).join('\n'));
                 console.log('***********************');
                 reject(stats.compilation.errors);
