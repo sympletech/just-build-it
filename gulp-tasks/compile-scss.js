@@ -6,22 +6,23 @@ const {scssCompiler} = require('../compilers/scss-compiler');
 
 const config = require('../config');
 
-const buildScssFiles = ({scss_glob, src_path, build_path}) => {
+const buildScssFiles = async ({scss_glob, src_path, build_path}) => {
 	console.log(`Building Scss`, src_path, scss_glob);
-	const scssFiles = lookupGlob({glob_def: scss_glob, src_path});
+	const scssFiles = await lookupGlob({glob_def: scss_glob, src_path});
 
-	return Promise.all(scssFiles.map((sourceScss) => {
+	for (const sourceScss of scssFiles) {
 		const outputDirName = getBuildPath({source_file: sourceScss, src_path, build_path});
 		const sourceFile = path.basename(sourceScss);
 		const sourceFolder = path.dirname(sourceScss);
-		return scssCompiler({sourceFolder, sourceFile, destFolder: outputDirName});
-	}));
+		await scssCompiler({sourceFolder, sourceFile, destFolder: outputDirName});
+	}
 };
 
-const buildScss = (builds) => Promise.all(
-	builds.map(({src_path, scss_glob, build_path}) =>
-		buildScssFiles({src_path, scss_glob, build_path}))
-);
+const buildScss = async (builds) => {
+	for (const {src_path, scss_glob, build_path} of builds) {
+		await buildScssFiles({src_path, scss_glob, build_path});
+	}
+};
 gulp.task('build-scss', () => buildScss(config.builds));
 
 const watchScss = (builds) => {
@@ -36,11 +37,13 @@ const watchScss = (builds) => {
 				src_path,
 				glob_def: scss_glob
 			});
+			
 			const buildlist = [fileName, ...filesIncluding].map((entry) =>
 				path.resolve(entry)
 					.replace(path.resolve(src_path), '')
 					.replace('\\', '/'));
-			buildScssFiles({src_path, scss_glob: buildlist, build_path});
+
+			await buildScssFiles({src_path, scss_glob: buildlist, build_path});
 		});
 	});
 };

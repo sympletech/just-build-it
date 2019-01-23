@@ -23,17 +23,17 @@ const toGlobArray = ({glob_def, src_path}) => {
     return globArrayDef;
 };
 
-const getFileList = (globArray) => {
+const getFileList = async (globArray) => {
     const includeStmts = globArray.filter((glb) => glb.indexOf('!') === -1);
     const excludeStmts = globArray.filter((glb) => glb.indexOf('!') === 0);
     const orderedGlob = [...includeStmts, ...excludeStmts];
-    const fileList = glob.sync(orderedGlob);
+    const fileList = await glob(orderedGlob);
     return fileList;
 };
 
-const lookupGlob = ({glob_def, src_path}) => {
+const lookupGlob = async ({glob_def, src_path}) => {
     const globArray = toGlobArray({glob_def, src_path});
-    const fileList = getFileList(globArray);
+    const fileList = await getFileList(globArray);
     return fileList;
 };
 
@@ -49,7 +49,7 @@ const findFilesIncluding = async ({source_file, src_path, glob_def, fileType}) =
         .replace(`.${fileType}`, '')
         .replace('_','')
         .toLowerCase();
-    const potentialFiles = lookupGlob({glob_def, src_path});
+    const potentialFiles = await lookupGlob({glob_def, src_path});
     const fileList = [];
 
     await Promise.all(
