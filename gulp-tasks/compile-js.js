@@ -6,22 +6,25 @@ const {jsCompiler} = require('../compilers/js-compiler');
 
 const config = require('../config');
 
-const buildJsFiles = ({js_glob, src_path, build_path, minify}) => {
+const buildJsFiles = async ({js_glob, src_path, build_path, minify}) => {
     console.log(`Building Javascript`, src_path, js_glob);
-    const jsFiles = lookupGlob({glob_def: js_glob, src_path});
-    return Promise.all(jsFiles.map((sourceJs) => {
+    const jsFiles = await lookupGlob({glob_def: js_glob, src_path});
+
+    for (const sourceJs of jsFiles) {
         const outputName = path.basename(sourceJs);
         const outputDirName = getBuildPath({source_file: sourceJs, src_path, build_path});
-        return jsCompiler({sourceJs, outputDirName, outputName, minify});
-    }));
+        await jsCompiler({sourceJs, outputDirName, outputName, minify});
+    }
 };
 
-const buildJs = (builds, minify) => Promise.all(
-    builds.map(({js_glob, src_path, build_path}) =>
-        buildJsFiles({js_glob, src_path, build_path, minify}))
-);
-gulp.task('build-js-dev', () => buildJs(config.builds, false));
-gulp.task('build-js', () => buildJs(config.builds, true));
+const buildJs = async (builds, minify) => {
+    for (const {js_glob, src_path, build_path} of builds) {
+        await buildJsFiles({js_glob, src_path, build_path, minify});
+    }
+};
+
+gulp.task('build-js-dev', async () => await buildJs(config.builds, false));
+gulp.task('build-js', async () => await buildJs(config.builds, true));
 
 const watchJs = (builds) => {
     console.log('Watching Javascript Files');
@@ -34,12 +37,13 @@ const watchJs = (builds) => {
                 src_path,
                 glob_def: js_glob
             });
+
             const buildlist = [fileName, ...filesIncluding].map((entry) =>
                 path.resolve(entry)
                     .replace(path.resolve(src_path), '')
                     .replace('\\', '/'));
 
-            buildJsFiles({js_glob: buildlist, src_path, build_path, minify: false});
+            await buildJsFiles({js_glob: buildlist, src_path, build_path, minify: false});
         });
     });
 };

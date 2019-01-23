@@ -13,16 +13,16 @@ describe('utils', () => {
         expect(JSON.stringify(globArray)).to.equal(JSON.stringify(['my/path/test.scss']));
     });
 
-    it('getFileList-should-exclude-files', () => {
-        const fileList = utils.getFileList([
+    it('getFileList-should-exclude-files', async () => {
+        const fileList = await utils.getFileList([
             './test_src/utils/getFileList-should-exclude-files/**/*',
             '!./test_src/utils/getFileList-should-exclude-files/**/*.txt'
         ]);
         expect(fileList.length).to.equal(1);
     });
 
-    it('getFileList-should-exclude-files-reverse', () => {
-        const fileList = utils.getFileList([
+    it('getFileList-should-exclude-files-reverse', async () => {
+        const fileList = await utils.getFileList([
             '!./test_src/utils/getFileList-should-exclude-files/**/*.txt',
             './test_src/utils/getFileList-should-exclude-files/**/*'
         ]);

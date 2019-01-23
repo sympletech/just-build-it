@@ -5,28 +5,31 @@ const path = require('path');
 
 const {lookupGlob} = require('../utils/utils');
 
-const copyStaticFiles = ({static_files_glob, src_path, build_path}) => {
+const copyStaticFiles = async ({static_files_glob, src_path, build_path}) => {
 	console.log(`Building Javascript ${(new Date()).toTimeString()}`);
-	const staticFiles = lookupGlob({glob_def: static_files_glob, src_path});
+	const staticFiles = await lookupGlob({glob_def: static_files_glob, src_path});
 
-	return Promise.all(staticFiles.map((sourceFile) => {
+	for (const sourceFile of staticFiles) {
 		const savePath = path.resolve(sourceFile).replace(path.resolve(src_path), '');
 		const destFile = `${path.resolve(build_path)}${savePath}`;
-		return fs.copy(sourceFile, destFile);
-	}));
+		await fs.copy(sourceFile, destFile);
+	}
 };
 
-const copyStaticFilesTask = (builds) => Promise.all(
-	builds.map(copyStaticFiles)
-);
-gulp.task('copy-static-files', () => copyStaticFilesTask(config.builds));
+const copyStaticFilesTask = async (builds) => {
+	for (const {static_files_glob, src_path, build_path} of builds) {
+		await copyStaticFiles({static_files_glob, src_path, build_path});
+	}
+};
+
+gulp.task('copy-static-files', async () => await copyStaticFilesTask(config.builds));
 
 const watchStaticFilesTask = (builds) => {
 	console.log('watching Static Files...');
 	builds.forEach((buildConfig) => {
 		const staticGlob = buildConfig.static_files_glob.map((fileGlob) => (`${buildConfig.src_path}/${fileGlob}`));
-		gulp.watch(staticGlob, () => {
-			copyStaticFiles(buildConfig);
+		gulp.watch(staticGlob, async () => {
+			await copyStaticFiles(buildConfig);
 		});
 	});
 };

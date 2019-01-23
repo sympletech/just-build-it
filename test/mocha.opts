@@ -1,0 +1,2 @@
+test/**/*.js
+--timeout 120000
