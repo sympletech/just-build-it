@@ -13,12 +13,7 @@ gulp.task('web-server', () => {
                 baseDir: config.server_root,
                 directory: true
             },
-            watchOptions: {
-                ignoreInitial: true
-            },
-            files: [
-                `${config.build_path}/**/*`
-            ],
+            watch: true,
             cors: true,
             reloadOnRestart: true
         });
