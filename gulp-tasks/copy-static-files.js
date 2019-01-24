@@ -6,7 +6,7 @@ const path = require('path');
 const {lookupGlob} = require('../utils/utils');
 
 const copyStaticFiles = async ({static_files_glob, src_path, build_path}) => {
-	console.log(`Building Javascript ${(new Date()).toTimeString()}`);
+	console.log(`Copying Static Files ${(new Date()).toTimeString()}`);
 	const staticFiles = await lookupGlob({glob_def: static_files_glob, src_path});
 
 	for (const sourceFile of staticFiles) {
