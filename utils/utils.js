@@ -1,7 +1,8 @@
 const path = require('path');
 const glob = require("glob-all");
-const fs = require('fs-extra');
-const readline = require('readline');
+// const fs = require('fs-extra');
+// const readline = require('readline');
+const LineByLineReader = require('line-by-line');
 
 const moveRemove = (path, globDef) => {
     let globResult = "";
@@ -76,12 +77,13 @@ const findFilesIncluding = async ({source_file, src_path, glob_def, fileType}) =
 };
 
 function checkFileForImport({potentialFile, fileName, fileType}) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
         let fileHasImport = false;
-        const lineReader = readline.createInterface({
-            input: fs.createReadStream(potentialFile)
+        const lineByLineReader = new LineByLineReader(potentialFile);
+        lineByLineReader.on('error', (err) => {
+            reject(err);
         });
-        lineReader.on('line', (line) => {
+        lineByLineReader.on('line', (line) => {
             const importDirective = (() => {
                 switch (fileType) {
                     case 'js':
@@ -94,12 +96,41 @@ function checkFileForImport({potentialFile, fileName, fileType}) {
 
             if (includesFile) {
                 fileHasImport = true;
-                lineReader.close();
+                lineByLineReader.close();
             }
         });
-        lineReader.on('close', () => {
+        lineByLineReader.on('end', () => {
             resolve(fileHasImport);
         });
+
+
+
+
+
+
+
+        // const lineReader = readline.createInterface({
+        //     input: fs.createReadStream(potentialFile)
+        // });
+        // lineReader.on('line', (line) => {
+        //     const importDirective = (() => {
+        //         switch (fileType) {
+        //             case 'js':
+        //                 return 'import';
+        //             case 'scss':
+        //                 return '@import';
+        //         }
+        //     })();
+        //     const includesFile = line.indexOf(importDirective) === 0 && line.toLowerCase().indexOf(fileName) > -1;
+
+        //     if (includesFile) {
+        //         fileHasImport = true;
+        //         lineReader.close();
+        //     }
+        // });
+        // lineReader.on('close', () => {
+        //     resolve(fileHasImport);
+        // });
     });
 }
 
