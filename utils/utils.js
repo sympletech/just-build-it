@@ -57,44 +57,51 @@ const findFilesIncluding = async ({source_file, src_path, glob_def, fileType}) =
     const potentialFiles = await lookupGlob({glob_def, src_path});
     const fileList = [];
 
-    await Promise.all(
-        potentialFiles.map((pFile) => new Promise((resolve) => {
-            const lineReader = readline.createInterface({
-                input: fs.createReadStream(pFile)
-            });
-            lineReader.on('line', async (line) => {
-                const importDirective = (() => {
-                    switch (fileType) {
-                        case 'js':
-                            return 'import';
-                        case 'scss':
-                            return '@import';
-                    }
-                })();
-                const includesFile = line.indexOf(importDirective) === 0 && line.toLowerCase().indexOf(fileName) > -1;
-
-                if (includesFile) {
-                    fileList.push(pFile);
-                    lineReader.close();
-                    resolve();
-                }
-            });
-            lineReader.on('close', () => {
-                resolve();
-            });
-        }))
-    );
+    for (const potentialFile of potentialFiles) {
+        const fileHasImport = await checkFileForImport({potentialFile, fileName, fileType});
+        if (fileHasImport) {
+            fileList.push(potentialFile);
+        }
+    }
 
     const fullFileList = new Set(fileList);
-    await Promise.all(fileList.map(async (pFile) => {
-        const additionalFiles = await findFilesIncluding({source_file: pFile, src_path, glob_def, fileType});
-        additionalFiles.forEach((aFile) => {
-            fullFileList.add(aFile);
-        });
-    }));
+    for (const potentialFile of fileList) {
+        const additionalFiles = await findFilesIncluding({source_file: potentialFile, src_path, glob_def, fileType});
+        for (const additionalFile of additionalFiles) {
+            fullFileList.add(additionalFile);
+        }
+    }
 
     return Array.from(fullFileList);
 };
 
+function checkFileForImport({potentialFile, fileName, fileType}) {
+    return new Promise((resolve) => {
+        let fileHasImport = false;
+        const lineReader = readline.createInterface({
+            input: fs.createReadStream(potentialFile)
+        });
+        lineReader.on('line', (line) => {
+            const importDirective = (() => {
+                switch (fileType) {
+                    case 'js':
+                        return 'import';
+                    case 'scss':
+                        return '@import';
+                }
+            })();
+            const includesFile = line.indexOf(importDirective) === 0 && line.toLowerCase().indexOf(fileName) > -1;
 
-module.exports = {moveRemove, toGlobArray, getFileList, lookupGlob, getBuildPath, findFilesIncluding};
+            if (includesFile) {
+                fileHasImport = true;
+                lineReader.close();
+            }
+        });
+        lineReader.on('close', () => {
+            resolve(fileHasImport);
+        });
+    });
+}
+
+
+module.exports = {moveRemove, toGlobArray, getFileList, lookupGlob, getBuildPath, findFilesIncluding, checkFileForImport};
