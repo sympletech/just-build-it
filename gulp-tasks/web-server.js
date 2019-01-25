@@ -14,8 +14,13 @@ gulp.task('web-server', () => {
                 directory: true
             },
             watch: true,
+            watchOptions:{
+                ignoreInitial: true
+            },
             cors: true,
-            reloadOnRestart: true
+            reloadOnRestart: true,
+            notify: false,
+            ui: false
         });
     }
 });

@@ -81,7 +81,7 @@ function checkFileForImport({potentialFile, fileName, fileType}) {
         let fileHasImport = false;
         const lineByLineReader = new LineByLineReader(potentialFile);
         lineByLineReader.on('error', (err) => {
-            reject(err);
+            resolve(false);
         });
         lineByLineReader.on('line', (line) => {
             const importDirective = (() => {

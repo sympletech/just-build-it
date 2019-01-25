@@ -33,7 +33,7 @@ const watchJs = (builds) => {
             const fileName = evt.path;
             const filesIncluding = await findFilesIncluding({
                 fileType: 'js',
-                source_file: evt.path,
+                source_file: fileName,
                 src_path,
                 glob_def: js_glob
             });
