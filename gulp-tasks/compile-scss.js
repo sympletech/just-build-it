@@ -30,7 +30,7 @@ const watchScss = (builds) => {
 	console.log('Watching Scss Files');
 	builds.forEach((buildConfig) => {
 		const {src_path, scss_glob, build_path} = buildConfig;
-		chokidar.watch(`${src_path}/**/*.scss`, config.watch_settings)
+		chokidar.watch(scss_glob, config.watch_settings)
 			.on('add', buildWatchedFile)
 			.on('change', buildWatchedFile);
 
