@@ -55,6 +55,19 @@ describe('utils', () => {
         expect(fileList.length).to.equal(2);
     });    
 
+    it('find-files-including-should-not-cause-an-infinate-loop', async () => {
+        const workingDir = `${path.resolve(__dirname, '../../test_src/utils/find-files-including-should-not-cause-an-infinate-loop')}`;
+
+        const fileList = await utils.findFilesIncluding({
+            fileType: 'js',
+            source_file: path.resolve(workingDir, './lib.js'),
+            src_path: workingDir,
+            glob_def: '**/*.js'
+        });
+
+        expect(fileList.length).to.equal(2);
+    });       
+
     it('find-files-including-should-work-for-scss-too', async () => {
         const workingDir = `${path.resolve(__dirname, '../../test_src/utils/find-files-including-should-work-for-scss-too')}`;
 

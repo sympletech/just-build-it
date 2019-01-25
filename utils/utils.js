@@ -50,7 +50,7 @@ const getBuildPath = ({source_file, src_path, build_path}) => {
     return outputDirName;
 };
 
-const findFilesIncluding = async ({source_file, src_path, glob_def, fileType}) => {
+const findFilesIncluding = async ({source_file, src_path, glob_def, fileType, filesChecked = new Set()}) => {
     const fileName = path.basename(source_file)
         .replace(`.${fileType}`, '')
         .replace('_', '')
@@ -65,11 +65,15 @@ const findFilesIncluding = async ({source_file, src_path, glob_def, fileType}) =
         }
     }
 
+    filesChecked.add(source_file);
+
     const fullFileList = new Set(fileList);
     for (const potentialFile of fileList) {
-        const additionalFiles = await findFilesIncluding({source_file: potentialFile, src_path, glob_def, fileType});
-        for (const additionalFile of additionalFiles) {
-            fullFileList.add(additionalFile);
+        if (!filesChecked.has(potentialFile)) {
+            const additionalFiles = await findFilesIncluding({source_file: potentialFile, src_path, glob_def, fileType, filesChecked});
+            for (const additionalFile of additionalFiles) {
+                fullFileList.add(additionalFile);
+            }
         }
     }
 
@@ -77,10 +81,10 @@ const findFilesIncluding = async ({source_file, src_path, glob_def, fileType}) =
 };
 
 function checkFileForImport({potentialFile, fileName, fileType}) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         let fileHasImport = false;
         const lineByLineReader = new LineByLineReader(potentialFile);
-        lineByLineReader.on('error', (err) => {
+        lineByLineReader.on('error', () => {
             resolve(false);
         });
         lineByLineReader.on('line', (line) => {
