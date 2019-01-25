@@ -54,6 +54,7 @@ const findFilesIncluding = async ({source_file, src_path, glob_def, fileType, fi
         .replace('_', '')
         .toLowerCase();
     const potentialFiles = await lookupGlob({glob_def, src_path});
+    console.log('potentialFiles', potentialFiles);
     const fileList = [];
 
     for (const potentialFile of potentialFiles) {
