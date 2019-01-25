@@ -51,7 +51,6 @@
     "gulp-sass-glob": "^1.0.9",
     "gulp-sourcemaps": "^2.6.4",
     "install": "^0.12.2",
-    "line-by-line": "^0.1.6",
     "require-dir": "^1.2.0",
     "webpack": "^4.27.1"
   },
