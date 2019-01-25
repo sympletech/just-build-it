@@ -30,10 +30,11 @@ const watchScss = (builds) => {
 	console.log('Watching Scss Files');
 	builds.forEach((buildConfig) => {
 		const {src_path, scss_glob, build_path} = buildConfig;
-		chokidar.watch(`${src_path}/**/*.scss`, {
-            ignoreInitial: true,
-            followSymlinks: true
-		}).on('all', async (evt, filePath) => {
+		chokidar.watch(`${src_path}/**/*.scss`, config.watch_settings)
+			.on('add', buildWatchedFile)
+			.on('change', buildWatchedFile);
+
+		async function buildWatchedFile(evt, filePath) {
 			const fileName = path.resolve(__dirname + filePath);
 			const filesIncluding = await findFilesIncluding({
 				fileType: 'scss',
@@ -48,7 +49,7 @@ const watchScss = (builds) => {
 					.replace('\\', '/'));
 
 			await buildScssFiles({src_path, scss_glob: buildlist, build_path});
-		});
+		}
 	});
 };
 gulp.task('watch-scss', () => watchScss(config.builds));

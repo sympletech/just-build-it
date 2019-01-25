@@ -30,10 +30,11 @@ gulp.task('build-js', async () => await buildJs(config.builds, true));
 const watchJs = (builds) => {
     console.log('Watching Javascript Files');
     builds.forEach(({js_glob, src_path, build_path}) => {
-        chokidar.watch(`${src_path}/**/*.js`,{
-            ignoreInitial: true,
-            followSymlinks: true
-        }).on('all', async (evt, filePath) => {
+        chokidar.watch(`${src_path}/**/*.js`, config.watch_settings)
+            .on('add', buildWatchedFile)
+            .on('change', buildWatchedFile);
+
+        async function buildWatchedFile(evt, filePath) {
             const fileName = path.resolve(__dirname + filePath);
             const filesIncluding = await findFilesIncluding({
                 fileType: 'js',
@@ -48,7 +49,7 @@ const watchJs = (builds) => {
                     .replace('\\', '/'));
 
             await buildJsFiles({js_glob: buildlist, src_path, build_path, minify: false});
-        });
+        }
     });
 };
 gulp.task('watch-js', () => watchJs(config.builds));

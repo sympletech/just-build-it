@@ -29,12 +29,9 @@ const watchStaticFilesTask = (builds) => {
 	console.log('watching Static Files...');
 	builds.forEach((buildConfig) => {
 		const staticGlob = buildConfig.static_files_glob.map((fileGlob) => (`${buildConfig.src_path}/${fileGlob}`));
-		chokidar.watch(staticGlob, {
-            ignoreInitial: true,
-            followSymlinks: true			
-		}).on('all', async () => {
-			await copyStaticFiles(buildConfig);
-		});
+		chokidar.watch(staticGlob, config.watch_settings)
+			.on('add', async () => await copyStaticFiles(buildConfig))
+			.on('change', async () => await copyStaticFiles(buildConfig));
 	});
 };
 gulp.task('watch-static-files', () => watchStaticFilesTask(config.builds));

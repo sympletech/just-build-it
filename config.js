@@ -24,7 +24,15 @@ delete configParsed.builds;
 const config = Object.assign({}, {
     "run_server": true,
     "server_port": 3000,
-    "server_root": "./dist"
+    "server_root": "./dist",
+    "watch_settings": {
+        ignoreInitial: true,
+        followSymlinks: true,
+        awaitWriteFinish: {
+            stabilityThreshold: 500,
+            pollInterval: 100
+        }
+    }
 }, configParsed, {builds});
 
 console.log('Initializing Just-Build-It with the following config:');
