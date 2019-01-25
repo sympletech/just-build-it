@@ -1,6 +1,6 @@
 const path = require('path');
 const glob = require("glob-all");
-const LineByLineReader = require('line-by-line');
+const fs = require("fs-extra");
 
 const moveRemove = (path, globDef) => {
     let globResult = "";
@@ -48,7 +48,7 @@ const getBuildPath = ({source_file, src_path, build_path}) => {
     return outputDirName;
 };
 
-const findFilesIncluding = async ({source_file, src_path, glob_def, fileType, filesChecked = new Set()}) => {
+const findFilesIncluding = async ({source_file, src_path, glob_def, fileType, filesChecked = new Set(), knownFiles = {}}) => {
     const fileName = path.basename(source_file)
         .replace(`.${fileType}`, '')
         .replace('_', '')
@@ -56,55 +56,71 @@ const findFilesIncluding = async ({source_file, src_path, glob_def, fileType, fi
     const potentialFiles = await lookupGlob({glob_def, src_path});
     const fileList = [];
 
-    for (const potentialFile of potentialFiles) {
-        const fileHasImport = await checkFileForImport({potentialFile, fileName, fileType});
-        if (fileHasImport) {
-            fileList.push(potentialFile);
-        }
-    }
+    await Promise.all(potentialFiles.map((potentialFile) => new Promise((resolve) => {
+        checkFileForImport({
+            potentialFile,
+            fileName,
+            fileType,
+            knownFiles
+        }).then((importCheck) => {
+            if (importCheck.fileHasImport) {
+                fileList.push(potentialFile);
+            }
+            resolve();
+        });
+    })));
 
     filesChecked.add(source_file);
 
     const fullFileList = new Set(fileList);
-    for (const potentialFile of fileList) {
+
+    await Promise.all(fileList.map((potentialFile) => new Promise((resolve) => {
         if (!filesChecked.has(potentialFile)) {
-            const additionalFiles = await findFilesIncluding({source_file: potentialFile, src_path, glob_def, fileType, filesChecked});
-            for (const additionalFile of additionalFiles) {
-                fullFileList.add(additionalFile);
-            }
+            findFilesIncluding({
+                source_file: potentialFile,
+                src_path,
+                glob_def,
+                fileType,
+                filesChecked,
+                knownFiles
+            }).then((additionalFiles) => {
+                for (const additionalFile of additionalFiles) {
+                    fullFileList.add(additionalFile);
+                }
+                resolve();
+            });
+        } else {
+            resolve();
         }
-    }
+    })));
 
     return Array.from(fullFileList);
 };
 
-function checkFileForImport({potentialFile, fileName, fileType}) {
-    return new Promise((resolve) => {
-        let fileHasImport = false;
-        const lineByLineReader = new LineByLineReader(potentialFile);
-        lineByLineReader.on('error', () => {
-            resolve(false);
-        });
-        lineByLineReader.on('line', (line) => {
-            const importDirective = (() => {
-                switch (fileType) {
-                    case 'js':
-                        return 'import';
-                    case 'scss':
-                        return '@import';
-                }
-            })();
-            const includesFile = line.indexOf(importDirective) === 0 && line.toLowerCase().indexOf(fileName) > -1;
+async function checkFileForImport({potentialFile, fileName, fileType, knownFiles = {}}) {
+    let importLines = [];
 
-            if (includesFile) {
-                fileHasImport = true;
-                lineByLineReader.close();
+    if (knownFiles[potentialFile]) {
+        importLines = knownFiles[potentialFile];
+    } else {
+        const fileContents = await fs.readFile(potentialFile, 'utf8');
+        const importDirective = (() => {
+            switch (fileType) {
+                case 'js':
+                    return 'import';
+                case 'scss':
+                    return '@import';
             }
-        });
-        lineByLineReader.on('end', () => {
-            resolve(fileHasImport);
-        });
-    });
+        })();
+        importLines = fileContents
+            .split('\n').filter((lineContent) => (lineContent.indexOf(importDirective) > -1))
+            .map((lineContent) => (lineContent.toLowerCase()));
+
+        knownFiles[potentialFile] = importLines;
+    }
+
+    const fileHasImport = importLines.some((lineContent) => lineContent.indexOf(fileName) > -1);
+    return {fileHasImport, knownFiles};
 }
 
 

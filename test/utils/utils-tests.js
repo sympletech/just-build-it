@@ -53,7 +53,7 @@ describe('utils', () => {
         });
 
         expect(fileList.length).to.equal(2);
-    });    
+    });
 
     it('find-files-including-should-not-cause-an-infinate-loop', async () => {
         const workingDir = `${path.resolve(__dirname, '../../test_src/utils/find-files-including-should-not-cause-an-infinate-loop')}`;
@@ -66,7 +66,7 @@ describe('utils', () => {
         });
 
         expect(fileList.length).to.equal(2);
-    });       
+    });
 
     it('find-files-including-should-work-for-scss-too', async () => {
         const workingDir = `${path.resolve(__dirname, '../../test_src/utils/find-files-including-should-work-for-scss-too')}`;
@@ -79,6 +79,20 @@ describe('utils', () => {
         });
 
         expect(fileList.length).to.equal(2);
-    });       
+    });
+
+    it('check-file-for-import-should-find-file-name', async () => {
+        const workingDir = `${path.resolve(__dirname, '../../test_src/utils/check-file-for-import-should-find-file-name')}`;
+        const potentialFile = path.resolve(workingDir, './test.js');
+
+        const {fileHasImport, knownFiles} = await utils.checkFileForImport({
+            potentialFile,
+            fileName: 'resource',
+            fileType: 'js'
+        });
+
+        expect(fileHasImport).to.equal(true);
+        expect(knownFiles[potentialFile]).to.not.be.null;
+    });
 });
 

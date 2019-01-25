@@ -30,12 +30,13 @@ gulp.task('build-js', async () => await buildJs(config.builds, true));
 const watchJs = (builds) => {
     console.log('Watching Javascript Files');
     builds.forEach(({js_glob, src_path, build_path}) => {
-        chokidar.watch(`${src_path}/**/*.js`, config.watch_settings)
+        chokidar.watch(js_glob, config.watch_settings)
             .on('add', buildWatchedFile)
             .on('change', buildWatchedFile);
 
-        async function buildWatchedFile(evt, filePath) {
+        async function buildWatchedFile(filePath) {
             const fileName = path.resolve(__dirname + filePath);
+            console.log(`Preparing to Build ${fileName}`);
             const filesIncluding = await findFilesIncluding({
                 fileType: 'js',
                 source_file: fileName,

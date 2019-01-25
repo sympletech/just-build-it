@@ -19,11 +19,11 @@
         }
     ],
     "watch_settings": {
-        ignoreInitial: true,
-        followSymlinks: true,
-        awaitWriteFinish: {
-            stabilityThreshold: 500,
-            pollInterval: 100
+        "ignoreInitial": true,
+        "followSymlinks": true,
+        "awaitWriteFinish": {
+            "stabilityThreshold": 500,
+            "pollInterval": 100
         }
     }
   }
