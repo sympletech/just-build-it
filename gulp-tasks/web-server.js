@@ -16,8 +16,13 @@ gulp.task('web-server', () => {
                 },
                 watch: true,
                 watchOptions: {
-                    ignoreInitial: true
+                    ignoreInitial: true,
+                    awaitWriteFinish: {
+                        stabilityThreshold: 2000,
+                        pollInterval: 100
+                    }
                 },
+                watchEvents: ["add", "change"],
                 cors: true,
                 reloadOnRestart: true,
                 notify: false,

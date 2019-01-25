@@ -1,4 +1,5 @@
 const gulp = require("gulp");
+const chokidar = require('chokidar');
 const config = require('../config');
 const fs = require('fs-extra');
 const path = require('path');
@@ -28,7 +29,10 @@ const watchStaticFilesTask = (builds) => {
 	console.log('watching Static Files...');
 	builds.forEach((buildConfig) => {
 		const staticGlob = buildConfig.static_files_glob.map((fileGlob) => (`${buildConfig.src_path}/${fileGlob}`));
-		gulp.watch(staticGlob, async () => {
+		chokidar.watch(staticGlob, {
+            ignoreInitial: true,
+            followSymlinks: true			
+		}).on('all', async () => {
 			await copyStaticFiles(buildConfig);
 		});
 	});

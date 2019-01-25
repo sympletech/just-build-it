@@ -1,7 +1,5 @@
 const path = require('path');
 const glob = require("glob-all");
-// const fs = require('fs-extra');
-// const readline = require('readline');
 const LineByLineReader = require('line-by-line');
 
 const moveRemove = (path, globDef) => {
@@ -24,7 +22,7 @@ const toGlobArray = ({glob_def, src_path}) => {
     return globArrayDef;
 };
 
-const getFileList = async (globArray) => new Promise((resolve, reject) => {
+const getFileList = (globArray) => new Promise((resolve, reject) => {
     const includeStmts = globArray.filter((glb) => glb.indexOf('!') === -1);
     const excludeStmts = globArray.filter((glb) => glb.indexOf('!') === 0);
     const orderedGlob = [...includeStmts, ...excludeStmts];
@@ -106,35 +104,6 @@ function checkFileForImport({potentialFile, fileName, fileType}) {
         lineByLineReader.on('end', () => {
             resolve(fileHasImport);
         });
-
-
-
-
-
-
-
-        // const lineReader = readline.createInterface({
-        //     input: fs.createReadStream(potentialFile)
-        // });
-        // lineReader.on('line', (line) => {
-        //     const importDirective = (() => {
-        //         switch (fileType) {
-        //             case 'js':
-        //                 return 'import';
-        //             case 'scss':
-        //                 return '@import';
-        //         }
-        //     })();
-        //     const includesFile = line.indexOf(importDirective) === 0 && line.toLowerCase().indexOf(fileName) > -1;
-
-        //     if (includesFile) {
-        //         fileHasImport = true;
-        //         lineReader.close();
-        //     }
-        // });
-        // lineReader.on('close', () => {
-        //     resolve(fileHasImport);
-        // });
     });
 }
 

@@ -1,5 +1,6 @@
 const gulp = require("gulp");
 const path = require("path");
+const chokidar = require('chokidar');
 
 const {lookupGlob, getBuildPath, findFilesIncluding} = require('../utils/utils');
 const {jsCompiler} = require('../compilers/js-compiler');
@@ -29,8 +30,11 @@ gulp.task('build-js', async () => await buildJs(config.builds, true));
 const watchJs = (builds) => {
     console.log('Watching Javascript Files');
     builds.forEach(({js_glob, src_path, build_path}) => {
-        gulp.watch(`${src_path}/**/*.js`, async (evt) => {
-            const fileName = evt.path;
+        chokidar.watch(`${src_path}/**/*.js`,{
+            ignoreInitial: true,
+            followSymlinks: true
+        }).on('all', async (evt, filePath) => {
+            const fileName = path.resolve(__dirname + filePath);
             const filesIncluding = await findFilesIncluding({
                 fileType: 'js',
                 source_file: fileName,
