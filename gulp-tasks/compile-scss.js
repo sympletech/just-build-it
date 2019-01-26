@@ -35,7 +35,7 @@ const watchScss = (builds) => {
 			.on('change', buildWatchedFile);
 
 		async function buildWatchedFile(filePath) {
-			const fileName = path.resolve(__dirname + filePath);
+			const fileName = path.resolve(filePath);
 			console.log(`Preparing to Build ${fileName}`);
 			const filesIncluding = await findFilesIncluding({
 				fileType: 'scss',
