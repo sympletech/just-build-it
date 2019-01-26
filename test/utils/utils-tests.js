@@ -73,7 +73,7 @@ describe('utils', () => {
 
         const fileList = await utils.findFilesIncluding({
             fileType: 'scss',
-            source_file: path.resolve(workingDir, './module.scss'),
+            source_file: path.resolve(workingDir, './_module.scss'),
             src_path: workingDir,
             glob_def: '**/*.scss'
         });
@@ -94,5 +94,54 @@ describe('utils', () => {
         expect(fileHasImport).to.equal(true);
         expect(knownFiles[potentialFile]).to.not.be.null;
     });
+
+    it('check-file-for-export-should-return-true-if-file-exports', async () => {
+        const workingDir = `${path.resolve(__dirname, '../../test_src/utils/check-file-for-export-should-return-true-if-file-exports')}`;
+        const source_file = path.resolve(workingDir, './test.js');
+
+        const {fileHasExport, knownFiles} = await utils.checkFileForExport({
+            source_file,
+            fileType: 'js'
+        });
+
+        expect(fileHasExport).to.equal(true);
+        expect(knownFiles[source_file]).to.not.be.null;
+    });
+
+    it('check-file-for-export-should-return-false-if-file-does-not-export', async () => {
+        const workingDir = `${path.resolve(__dirname, '../../test_src/utils/check-file-for-export-should-return-false-if-file-does-not-export')}`;
+        const source_file = path.resolve(workingDir, './test.js');
+
+        const {fileHasExport} = await utils.checkFileForExport({
+            source_file,
+            fileType: 'js'
+        });
+
+        expect(fileHasExport).to.equal(false);
+    });
+
+    it('check-file-for-export-should-return-true-if-scss-has-underscore', async () => {
+        const workingDir = `${path.resolve(__dirname, '../../test_src/utils/check-file-for-export-should-return-true-if-scss-has-underscore')}`;
+        const source_file = path.resolve(workingDir, './_test.scss');
+
+        const {fileHasExport} = await utils.checkFileForExport({
+            source_file,
+            fileType: 'scss'
+        });
+
+        expect(fileHasExport).to.equal(true);
+    });   
+
+    it('check-file-for-export-should-return-false-if-scss--does-not-have-underscore', async () => {
+        const workingDir = `${path.resolve(__dirname, '../../test_src/utils/check-file-for-export-should-return-false-if-scss--does-not-have-underscore')}`;
+        const source_file = path.resolve(workingDir, './test.scss');
+
+        const {fileHasExport} = await utils.checkFileForExport({
+            source_file,
+            fileType: 'scss'
+        });
+
+        expect(fileHasExport).to.equal(false);
+    });    
 });
 

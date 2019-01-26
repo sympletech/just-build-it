@@ -49,53 +49,65 @@ const getBuildPath = ({source_file, src_path, build_path}) => {
 };
 
 const findFilesIncluding = async ({source_file, src_path, glob_def, fileType, filesChecked = new Set(), knownFiles = {}}) => {
-    const fileName = path.basename(source_file)
-        .replace(`.${fileType}`, '')
-        .replace('_', '')
-        .toLowerCase();
-    const potentialFiles = await lookupGlob({glob_def, src_path});
-    const fileList = [];
+    const {fileHasExport} = await checkFileForExport({source_file, fileType, knownFiles});
+    if (fileHasExport) {
+        const fileName = path.basename(source_file)
+            .replace(`.${fileType}`, '')
+            .replace('_', '')
+            .toLowerCase();
+        const potentialFiles = await lookupGlob({glob_def, src_path});
+        const fileList = [];
 
-    await Promise.all(potentialFiles.map((potentialFile) => new Promise((resolve) => {
-        checkFileForImport({
-            potentialFile,
-            fileName,
-            fileType,
-            knownFiles
-        }).then((importCheck) => {
-            if (importCheck.fileHasImport) {
-                fileList.push(potentialFile);
-            }
-            resolve();
-        });
-    })));
-
-    filesChecked.add(source_file);
-
-    const fullFileList = new Set(fileList);
-
-    await Promise.all(fileList.map((potentialFile) => new Promise((resolve) => {
-        if (!filesChecked.has(potentialFile)) {
-            findFilesIncluding({
-                source_file: potentialFile,
-                src_path,
-                glob_def,
+        await Promise.all(potentialFiles.map((potentialFile) => new Promise((resolve) => {
+            checkFileForImport({
+                potentialFile,
+                fileName,
                 fileType,
-                filesChecked,
                 knownFiles
-            }).then((additionalFiles) => {
-                for (const additionalFile of additionalFiles) {
-                    fullFileList.add(additionalFile);
+            }).then((importCheck) => {
+                if (importCheck.fileHasImport) {
+                    fileList.push(potentialFile);
                 }
                 resolve();
             });
-        } else {
-            resolve();
-        }
-    })));
+        })));
 
-    return Array.from(fullFileList);
+        filesChecked.add(source_file);
+
+        const fullFileList = new Set(fileList);
+        for (const potentialFile of fileList) {
+            if (!filesChecked.has(potentialFile)) {
+                const additionalFiles = await findFilesIncluding({source_file: potentialFile, src_path, glob_def, fileType, filesChecked});
+                for (const additionalFile of additionalFiles) {
+                    fullFileList.add(additionalFile);
+                }
+            }
+        }
+        return Array.from(fullFileList);
+    } else {
+        return [source_file];
+    }
 };
+
+async function checkFileForExport({source_file, fileType, knownFiles = {}}) {
+    let fileHasExport = false;
+    if (fileType === 'js') {
+        const fileContents = await fs.readFile(source_file, 'utf8');
+
+        const importLines = fileContents
+            .split('\n').filter((lineContent) => (lineContent.indexOf('import') > -1))
+            .map((lineContent) => (lineContent.toLowerCase()));
+
+        knownFiles[source_file] = importLines;
+        fileHasExport = fileContents.indexOf('export') > -1;
+    }
+
+    if (fileType === 'scss') {
+        fileHasExport = path.basename(source_file).indexOf('_') === 0;
+    }
+
+    return {fileHasExport, knownFiles};
+}
 
 async function checkFileForImport({potentialFile, fileName, fileType, knownFiles = {}}) {
     let importLines = [];
@@ -124,4 +136,4 @@ async function checkFileForImport({potentialFile, fileName, fileType, knownFiles
 }
 
 
-module.exports = {moveRemove, toGlobArray, getFileList, lookupGlob, getBuildPath, findFilesIncluding, checkFileForImport};
+module.exports = {moveRemove, toGlobArray, getFileList, lookupGlob, getBuildPath, findFilesIncluding, checkFileForExport, checkFileForImport};
