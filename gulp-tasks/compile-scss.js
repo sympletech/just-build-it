@@ -11,12 +11,12 @@ const buildScssFiles = async ({scss_glob, src_path, build_path}) => {
 	console.log(`Building Scss`, src_path, scss_glob);
 	const scssFiles = await lookupGlob({glob_def: scss_glob, src_path});
 
-	for (const sourceScss of scssFiles) {
+	await Promise.all(scssFiles.map((sourceScss) => {
 		const outputDirName = getBuildPath({source_file: sourceScss, src_path, build_path});
 		const sourceFile = path.basename(sourceScss);
 		const sourceFolder = path.dirname(sourceScss);
-		await scssCompiler({sourceFolder, sourceFile, destFolder: outputDirName});
-	}
+		return scssCompiler({sourceFolder, sourceFile, destFolder: outputDirName});
+	}));	
 };
 
 const buildScss = async (builds) => {

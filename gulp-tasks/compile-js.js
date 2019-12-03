@@ -11,11 +11,11 @@ const buildJsFiles = async ({js_glob, src_path, build_path, minify}) => {
     console.log(`Building Javascript`, src_path, js_glob);
     const jsFiles = await lookupGlob({glob_def: js_glob, src_path});
 
-    for (const sourceJs of jsFiles) {
+    await Promise.all(jsFiles.map((sourceJs) => {
         const outputName = path.basename(sourceJs);
         const outputDirName = getBuildPath({source_file: sourceJs, src_path, build_path});
-        await jsCompiler({sourceJs, outputDirName, outputName, minify});
-    }
+        return jsCompiler({sourceJs, outputDirName, outputName, minify});
+    }));
 };
 
 const buildJs = async (builds, minify) => {

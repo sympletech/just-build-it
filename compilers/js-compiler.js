@@ -43,7 +43,19 @@ function compileWithWebpack({sourceJs, outputDirName, outputName, minify}) {
                         use: {
                             loader: 'babel-loader',
                             options: {
-                                presets: ['@babel/preset-env', 'react-app']
+                                presets: [
+                                    [
+                                        '@babel/preset-env',
+                                        {
+                                            "targets": {
+                                                "browsers": ["last 2 versions", "ie >= 11"]
+                                            },
+                                            "useBuiltIns": "usage",
+                                            "corejs": "3.4.7"
+                                        }
+                                    ],
+                                    'react-app'
+                                ]
                             }
                         }
                     }
