@@ -43,6 +43,26 @@ function compileWithWebpack({sourceJs, outputDirName, outputName, minify}) {
                         use: {
                             loader: 'babel-loader',
                             options: {
+                                presets: [
+                                    [
+                                        '@babel/preset-env',
+                                        {
+                                            "targets": {
+                                                "browsers": ["last 2 versions", "ie >= 11"]
+                                            }
+                                        }
+                                    ],
+                                    'react-app'
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        test: /\.m?js$/,
+                        include: /(node_modules|bower_components)/,
+                        use: {
+                            loader: 'babel-loader',
+                            options: {
                                 plugins: ["@babel/plugin-transform-arrow-functions"],
                                 presets: [
                                     [
@@ -50,16 +70,13 @@ function compileWithWebpack({sourceJs, outputDirName, outputName, minify}) {
                                         {
                                             "targets": {
                                                 "browsers": ["last 2 versions", "ie >= 11"]
-                                            },
-                                            "useBuiltIns": "usage",
-                                            "corejs": "3.4.7"
+                                            }
                                         }
-                                    ],
-                                    'react-app'
-                                ]
+                                    ]
+                                ]   
                             }
                         }
-                    }
+                    }                    
                 ]
             }
         }, (err, stats) => {
