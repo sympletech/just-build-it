@@ -43,6 +43,7 @@ function compileWithWebpack({sourceJs, outputDirName, outputName, minify}) {
                         use: {
                             loader: 'babel-loader',
                             options: {
+                                plugins: ["@babel/plugin-transform-arrow-functions"],
                                 presets: [
                                     [
                                         '@babel/preset-env',
