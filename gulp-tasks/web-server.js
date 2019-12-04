@@ -14,11 +14,11 @@ gulp.task('web-server', () => {
                     baseDir: config.server_root,
                     directory: true
                 },
-                watch: true,
+                watch: false,
                 watchOptions: config.watch_settings,
                 watchEvents: ["add", "change"],
                 cors: true,
-                reloadOnRestart: true,
+                reloadOnRestart: false,
                 notify: false,
                 ui: false
             });
