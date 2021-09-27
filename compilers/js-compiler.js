@@ -65,7 +65,9 @@ function compileWithWebpack({ sourceJs, outputDirName, outputName, minify }) {
                             options: {
                                 plugins: [
                                     "@babel/plugin-transform-arrow-functions",
-                                    ["@babel/plugin-proposal-private-methods", { "loose": true }]
+                                    ["@babel/plugin-proposal-private-methods", { "loose": true }],
+                                    ["@babel/plugin-proposal-private-property-in-object", { "loose": true }],
+                                    ["@babel/plugin-proposal-class-properties", { "loose": true }]
                                 ],
                                 presets: [
                                     [

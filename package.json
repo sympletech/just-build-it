@@ -1,6 +1,6 @@
 {
   "name": "just-build-it",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "A reusable builder to compile es6 and scss from a source directory into a destination directory",
   "bin": {
     "just-build-it": "bin/just-build-it.js"
@@ -36,7 +36,9 @@
   "homepage": "https://github.com/sympletech/just-build-it#readme",
   "dependencies": {
     "@babel/core": "^7.15.5",
+    "@babel/plugin-proposal-class-properties": "^7.14.5",
     "@babel/plugin-proposal-private-methods": "^7.14.5",
+    "@babel/plugin-proposal-private-property-in-object": "^7.15.4",
     "@babel/plugin-transform-arrow-functions": "^7.14.5",
     "@babel/preset-env": "^7.15.6",
     "babel-loader": "^8.2.2",
