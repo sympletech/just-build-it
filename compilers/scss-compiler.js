@@ -1,6 +1,6 @@
 const gulp = require("gulp");
 const plumber = require('gulp-plumber');
-const sass = require("gulp-sass");
+const sass = require("gulp-sass")(require('node-sass'));
 const sassGlob = require('gulp-sass-glob');
 const sourcemaps = require('gulp-sourcemaps');
 
