@@ -3,20 +3,20 @@ const path = require('path');
 const babel = require('@babel/core');
 const fs = require('fs-extra');
 
-const {promisify} = require('util');
+const { promisify } = require('util');
 const unlink = promisify(fs.unlink);
 
-async function jsCompiler({sourceJs, sourcePath, outputDirName, outputName, minify}) {
+async function jsCompiler({ sourceJs, sourcePath, outputDirName, outputName, minify }) {
     try {
-        await compileWithWebpack({sourceJs, outputDirName, outputName, minify});
+        await compileWithWebpack({ sourceJs, outputDirName, outputName, minify });
     } catch (err) {
         try {
             await unlink(path.resolve(outputDirName, `./${outputName}`));
-            await compileWithBabel({sourceJs, sourcePath, outputDirName, outputName});
+            await compileWithBabel({ sourceJs, sourcePath, outputDirName, outputName });
         } catch (err) {
             try {
                 await unlink(path.resolve(outputDirName, `./${outputName}`));
-                await copyFileAsIsToDest({sourceJs, sourcePath, outputDirName});
+                await copyFileAsIsToDest({ sourceJs, sourcePath, outputDirName });
             } catch (err) {
                 console.error(`Unable to Compile ${sourceJs}`);
             }
@@ -24,7 +24,7 @@ async function jsCompiler({sourceJs, sourcePath, outputDirName, outputName, mini
     }
 }
 
-function compileWithWebpack({sourceJs, outputDirName, outputName, minify}) {
+function compileWithWebpack({ sourceJs, outputDirName, outputName, minify }) {
     return new Promise((resolve, reject) => {
         process.env.NODE_ENV = minify ? 'production' : 'development';
         webpack({
@@ -63,7 +63,10 @@ function compileWithWebpack({sourceJs, outputDirName, outputName, minify}) {
                         use: {
                             loader: 'babel-loader',
                             options: {
-                                plugins: ["@babel/plugin-transform-arrow-functions"],
+                                plugins: [
+                                    "@babel/plugin-transform-arrow-functions",
+                                    ["@babel/plugin-proposal-private-methods", { "loose": true }]
+                                ],
                                 presets: [
                                     [
                                         '@babel/preset-env',
@@ -73,10 +76,10 @@ function compileWithWebpack({sourceJs, outputDirName, outputName, minify}) {
                                             }
                                         }
                                     ]
-                                ]   
+                                ]
                             }
                         }
-                    }                    
+                    }
                 ]
             }
         }, (err, stats) => {
@@ -93,7 +96,7 @@ function compileWithWebpack({sourceJs, outputDirName, outputName, minify}) {
     });
 }
 
-function compileWithBabel({sourceJs, sourcePath, outputDirName, outputName}) {
+function compileWithBabel({ sourceJs, sourcePath, outputDirName, outputName }) {
     return new Promise(async (resolve, reject) => {
         babel.transformFile(sourceJs, {
             cwd: sourcePath,
@@ -117,10 +120,10 @@ function compileWithBabel({sourceJs, sourcePath, outputDirName, outputName}) {
     });
 }
 
-function copyFileAsIsToDest({sourceJs, sourcePath, outputDirName}) {
+function copyFileAsIsToDest({ sourceJs, sourcePath, outputDirName }) {
     const savePath = path.resolve(sourceJs).replace(path.resolve(sourcePath), '');
     const destFile = `${path.resolve(outputDirName)}${savePath}`;
     return fs.copy(sourceJs, destFile);
 }
 
-module.exports = {jsCompiler, compileWithWebpack, compileWithBabel, copyFileAsIsToDest};
+module.exports = { jsCompiler, compileWithWebpack, compileWithBabel, copyFileAsIsToDest };
