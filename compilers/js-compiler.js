@@ -27,6 +27,7 @@ async function jsCompiler({ sourceJs, sourcePath, outputDirName, outputName, min
 function compileWithWebpack({ sourceJs, outputDirName, outputName, minify }) {
     return new Promise((resolve, reject) => {
         process.env.NODE_ENV = minify ? 'production' : 'development';
+
         webpack({
             entry: sourceJs,
             output: {
@@ -43,12 +44,17 @@ function compileWithWebpack({ sourceJs, outputDirName, outputName, minify }) {
                         use: {
                             loader: 'babel-loader',
                             options: {
+                                plugins: [
+                                    ["@babel/plugin-proposal-private-methods", { "loose": true }],
+                                    ["@babel/plugin-proposal-private-property-in-object", { "loose": true }],
+                                    ["@babel/plugin-proposal-class-properties", { "loose": true }]
+                                ],                                
                                 presets: [
                                     [
                                         '@babel/preset-env',
                                         {
                                             "targets": {
-                                                "browsers": ["last 2 versions", "ie >= 11"]
+                                                "browsers": ["last 2 versions"]
                                             }
                                         }
                                     ],
@@ -64,7 +70,6 @@ function compileWithWebpack({ sourceJs, outputDirName, outputName, minify }) {
                             loader: 'babel-loader',
                             options: {
                                 plugins: [
-                                    "@babel/plugin-transform-arrow-functions",
                                     ["@babel/plugin-proposal-private-methods", { "loose": true }],
                                     ["@babel/plugin-proposal-private-property-in-object", { "loose": true }],
                                     ["@babel/plugin-proposal-class-properties", { "loose": true }]
@@ -74,7 +79,7 @@ function compileWithWebpack({ sourceJs, outputDirName, outputName, minify }) {
                                         '@babel/preset-env',
                                         {
                                             "targets": {
-                                                "browsers": ["last 2 versions", "ie >= 11"]
+                                                "browsers": ["last 2 versions"]
                                             }
                                         }
                                     ]
