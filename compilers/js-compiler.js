@@ -48,13 +48,17 @@ function compileWithWebpack({ sourceJs, outputDirName, outputName, minify }) {
                                     ["@babel/plugin-proposal-private-methods", { "loose": true }],
                                     ["@babel/plugin-proposal-private-property-in-object", { "loose": true }],
                                     ["@babel/plugin-proposal-class-properties", { "loose": true }]
-                                ],                                
+                                ],
                                 presets: [
                                     [
                                         '@babel/preset-env',
                                         {
                                             "targets": {
-                                                "browsers": ["last 2 versions"]
+                                                "browsers": [
+                                                    ">0.25%",
+                                                    "not ie 11",
+                                                    "not op_mini all"
+                                                ]
                                             }
                                         }
                                     ],
