@@ -1,0 +1,16 @@
+{
+  "name": "test_project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "just-build-it",
+    "build": "just-build-it build",
+    "watch": "just-build-it watch"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "just-build-it": "file:.."
+  }
+}
