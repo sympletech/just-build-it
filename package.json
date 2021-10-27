@@ -35,15 +35,15 @@
   },
   "homepage": "https://github.com/sympletech/just-build-it#readme",
   "dependencies": {
-    "@babel/core": "^7.15.5",
+    "@babel/core": "^7.15.8",
     "@babel/plugin-proposal-class-properties": "^7.14.5",
     "@babel/plugin-proposal-private-methods": "^7.14.5",
     "@babel/plugin-proposal-private-property-in-object": "^7.15.4",
     "@babel/plugin-transform-arrow-functions": "^7.14.5",
-    "@babel/preset-env": "^7.15.6",
+    "@babel/preset-env": "^7.15.8",
     "babel-loader": "^8.2.2",
     "babel-preset-react-app": "^10.0.0",
-    "browser-sync": "^2.27.5",
+    "browser-sync": "^2.27.7",
     "chokidar": "^3.5.2",
     "fs-extra": "^10.0.0",
     "glob": "^7.2.0",
@@ -57,7 +57,7 @@
     "install": "^0.13.0",
     "node-sass": "^6.0.1",
     "require-dir": "^1.2.0",
-    "webpack": "^5.54.0"
+    "webpack": "^5.60.0"
   },
   "devDependencies": {
     "chai": "^4.2.0",

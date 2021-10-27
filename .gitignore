@@ -4,3 +4,4 @@ npm-debug.log
 /.nyc_output
 /test_project/node_modules
 /test_project/dist
+/package-lock.json
