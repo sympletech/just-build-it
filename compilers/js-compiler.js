@@ -35,7 +35,7 @@ function compileWithWebpack({ sourceJs, outputDirName, outputName, minify }) {
                 filename: outputName
             },
             mode: minify ? 'production' : 'development',
-            devtool: minify ? '' : 'eval-source-map',
+            devtool: minify ? undefined : 'eval-source-map',
             module: {
                 rules: [
                     {
@@ -93,9 +93,10 @@ function compileWithWebpack({ sourceJs, outputDirName, outputName, minify }) {
             if (err || stats.hasErrors()) {
                 console.log('***********************');
                 console.log(`ERROR WEBPACKING ${sourceJs} - Trying Babel`);
-                console.log(stats.compilation.errors.map((err) => err.message).join('\n'));
+                const errors = stats?.compilation?.errors || [];
+                console.log(errors.map((err) => err.message).join('\n'));
                 console.log('***********************');
-                reject(stats.compilation.errors);
+                reject(errors);
             } else {
                 resolve(stats);
             }
