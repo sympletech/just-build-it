@@ -8,6 +8,7 @@ const builds = configParsed.builds.map((buildConfig) => (Object.assign({}, {
     "src_path": "./src",
     "build_path": "./dist",
     "js_glob": "**/*.js",
+    
     "scss_glob": "**/*.scss",
     "static_files_glob": [
         "/**/*.html",
@@ -32,7 +33,8 @@ const config = Object.assign({}, {
             stabilityThreshold: 500,
             pollInterval: 100
         }
-    }
+    },
+    "minify_js": true
 }, configParsed, {builds});
 
 console.log('Initializing Just-Build-It with the following config:');

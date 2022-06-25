@@ -25,7 +25,7 @@ const buildJs = async (builds, minify) => {
 };
 
 gulp.task('build-js-dev', async () => await buildJs(config.builds, false));
-gulp.task('build-js', async () => await buildJs(config.builds, true));
+gulp.task('build-js', async () => await buildJs(config.builds, config.minify_js));
 
 const watchJs = (builds) => {
     console.log('Watching Javascript Files');
